@@ -4,9 +4,7 @@
 export LANG=en_US.UTF-8
 SHHOME=$(cd `dirname $0`; pwd)
 cd $SHHOME
-echo --------------
 git add -A
-echo --------------
 git status
 echo --------------
 git commit -m "`date +%Y-%m-%d\ %H:%M:%S`"
