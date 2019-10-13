@@ -1,4 +1,4 @@
-#!/bin/bash -v
+#!/bin/bash
 git add .
 git commit -m "更新说明-`date +%Y-%m-%d\ %H:%M:%S`"
 git fetch
