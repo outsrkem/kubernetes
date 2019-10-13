@@ -8,10 +8,10 @@ git add -A
 git status
 echo -e "\033[32m----> git commit -m "`date +%Y-%m-%d\ %H:%M:%S`"\033[0m"
 git commit -m "`date +%Y-%m-%d\ %H:%M:%S`"
-echo --------------
+echo -e "\033[32m----> git fetch \033[0m"
 git fetch
-echo --------------
+echo -e "\033[32m----> git merge origin/master\033[0m"
 git merge origin/master
-echo --------------
+echo -e "\033[32m----> git push origin master\033[0m"
 git push origin master
 
