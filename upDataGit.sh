@@ -4,7 +4,7 @@
 export LANG=en_US.UTF-8
 SHHOME=$(cd `dirname $0`; pwd)
 cd $SHHOME
-echo -e "\033[32m----> pwd\033[0m"
+echo -e "\033[32m----> `pwd` \033[0m"
 git add -A
 git status
 echo -e "\033[32m----> git commit -m "`date +%Y-%m-%d\ %H:%M:%S`"\033[0m"
