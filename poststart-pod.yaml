@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: poststart-pod
+  namespace: default
+spec:
+  containers:
+  - name: busybox-httpd
+    image: busybox
+    imagePullPolicy: IfNotPresent
+    lifecycle: #生命周期探测
+      postStart:
+        exec:
+          #这个command是定义postStart后的需要执行的命令
+          command: ["mkdir","-p","/data/web/html"]
+    #这是定义容器里面执行的命令，不过这个命令要先于postStart里面的command
+    command: ["/bin/sh","-c","sleep 3600"]

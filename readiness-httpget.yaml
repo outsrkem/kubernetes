@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: readiness-httpget-pod
+  namespace: default
+spec:
+  containers:
+  - name: readiness-httpget-container
+    image: ikubernetes/myapp:v1
+    imagePullPolicy: IfNotPresent
+    ports:
+    - name: http
+      containerPort: 80
+    readinessProbe: #就绪性探针
+      httpGet: #探针方式（获取状态码）
+        port: http  #填80也可以
+        path: /index.html
+      initialDelaySeconds: 1 #表示容器启动后1s后开始探测
+      periodSeconds: 3 #表示每3s探测一次
+
