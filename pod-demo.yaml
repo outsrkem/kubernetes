@@ -24,7 +24,7 @@ spec:
     image: busybox:latest
     imagePullPolicy: IfNotPresent
     command:
-    #command: [ "/bin/sh","-c","sleep 3600" ]
+    # command: [ "/bin/sh","-c","sleep 3600" ]
     - "/bin/sh"
     - "-c"
     - "sleep 3600"
