@@ -10,7 +10,7 @@ kubernetes 相关文件
 
 https://blog.csdn.net/lvdepeng123/article/details/79215882
 
-
+```
 .
 ├── controllerManagerYaml
 │   └── rs-myapp.yaml
@@ -22,4 +22,4 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   └── readiness-httpget.yaml
 ├── README.md
 └── upDataGit.sh
-
+```
