@@ -6,7 +6,7 @@ SHHOME=$(cd `dirname $0`; pwd)
 cd $SHHOME
 git add -A
 git status
-echo -e '----> git commit -m "`date +%Y-%m-%d\ %H:%M:%S`"'
+echo -e "\033[32m----> git commit -m "`date +%Y-%m-%d\ %H:%M:%S`"\033[0m"
 git commit -m "`date +%Y-%m-%d\ %H:%M:%S`"
 echo --------------
 git fetch
