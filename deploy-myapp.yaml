@@ -4,7 +4,7 @@ metadata:
   name: myapp-deploy
   namespace: default
 spec: #这里是指的是控制器的spec
-  replicas: 4 #几个副本
+  replicas: 3 #几个副本
   selector:   #标签选择器
     matchLabels: #攥着键值对模式
       app: myapp
@@ -17,7 +17,7 @@ spec: #这里是指的是控制器的spec
     spec: #这里是pod的spec
       containers:
       - name: myapp
-        image: ikubernetes/myapp:v2
+        image: ikubernetes/myapp:v1
         imagePullPolicy: IfNotPresent
         ports:
           - name: http
