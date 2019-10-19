@@ -9,6 +9,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 
 ```
 .
+├── deploy-myapp.yaml
 ├── liveness-exec.yaml
 ├── liveness-http.yaml
 ├── pod-demo.yaml
@@ -19,5 +20,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── rs-svc.yaml
 └── upDataGit.sh
 
-0 directories, 9 files
+0 directories, 10 files
 ```
