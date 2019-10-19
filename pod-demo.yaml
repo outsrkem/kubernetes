@@ -1,7 +1,7 @@
 apiVersion: v1 
 kind: Pod
 metadata:
-  name: pod-demo
+  name: pod-demo-test
   namespace: default
   labels:
     # kv格式的，也可以用花括号表示
