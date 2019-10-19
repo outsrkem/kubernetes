@@ -18,7 +18,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── readiness-httpget.yaml
 ├── README.md
 ├── rs-myapp.yaml
-├── rs-svc.yaml
+├── svc-rs-myapp.yaml
 └── upDataGit.sh
 
 0 directories, 11 files
