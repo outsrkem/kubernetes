@@ -7,7 +7,8 @@ spec:
   selector:
     app: myapp
     release: canary
-  clusterIP: None
+  clusterIP: None # 此处为None，则创建的svc是没有IP的
   ports:
   - port: 80
     targetPort: 80
+# 无头svc
