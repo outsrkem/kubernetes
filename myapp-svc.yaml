@@ -9,6 +9,7 @@ spec:
     release: canary
   clusterIP: 10.99.99.99
   type: NodePort
+# sessionAffinity: ClientIP  # 定义sessionAffinity ，此时注释掉，下面是用补丁方式
   ports:
   - port: 80
     targetPort: 80
