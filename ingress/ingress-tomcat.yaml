@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-tomcat
+  namespace: default #这里要和deployment和要发布的service处于同一命名空间
+  annotations: #这个注解说明我们要用到的ingress-controller是nginx，而不是traefic，enjoy
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: tomcat.yong.com #表示访问这个域名就会转发到后端tomcat 管理的pod上的服务:
+    http:
+      paths:
+      - path:
+        backend:
+          serviceName: tomcat
+          servicePort: 8080
