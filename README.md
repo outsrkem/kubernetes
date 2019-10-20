@@ -12,6 +12,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── deploy-myapp.yaml
 ├── liveness-exec.yaml
 ├── liveness-http.yaml
+├── myapp-svc-headless.yaml
 ├── myapp-svc.yaml
 ├── pod-demo.yaml
 ├── poststart-pod.yaml
@@ -23,5 +24,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── rs-myapp.yaml
 └── upDataGit.sh
 
-0 directories, 13 files
+0 directories, 14 files
 ```
