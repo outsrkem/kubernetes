@@ -1,26 +1,10 @@
-apiVersion: v1
-kind: Service
-metadata:
-    name: svc-myapp-deploy
-    namespace: default
-spec:
-    selector:
-        app: myapp
-        release: canary
-    type: NodePort
-    ports:
-    - port: 80
-      targetPort: 80
-      nodePort: 30090
-# 以上是为该Pod创建的svc
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: myapp-deploy
   namespace: default
 spec: #这里是指的是控制器的spec
-  replicas: 3 #几个副本
+  replicas: 5 #几个副本
   selector:   #标签选择器
     matchLabels: #攥着键值对模式
       app: myapp

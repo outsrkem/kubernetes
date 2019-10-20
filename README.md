@@ -10,16 +10,17 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ```
 .
 ├── deploy-myapp.yaml
-├── ds-demo.yaml
 ├── liveness-exec.yaml
 ├── liveness-http.yaml
 ├── pod-demo.yaml
 ├── poststart-pod.yaml
 ├── readiness-httpget.yaml
 ├── README.md
+├── redis-ds-demo-svc.yaml
+├── redis-ds-demo.yaml
+├── rs-myapp-svc.yaml
 ├── rs-myapp.yaml
-├── svc-rs-myapp.yaml
 └── upDataGit.sh
 
-0 directories, 11 files
+0 directories, 12 files
 ```
