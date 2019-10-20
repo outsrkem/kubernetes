@@ -13,7 +13,10 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── ingress
 │   ├── deploy-demo.yaml
 │   ├── ingress-myapp.yaml
+│   ├── ingress-tomcat-tls.yaml
 │   ├── ingress-tomcat.yaml
+│   ├── tls.crt
+│   ├── tls.key
 │   └── tomcat-demo.yaml
 ├── liveness-exec.yaml
 ├── liveness-http.yaml
@@ -29,5 +32,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── rs-myapp.yaml
 └── upDataGit.sh
 
-1 directory, 18 files
+1 directory, 21 files
 ```
