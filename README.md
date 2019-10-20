@@ -11,7 +11,8 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 .
 ├── deploy-myapp.yaml
 ├── ingress
-│   └── deploy-demo.yaml
+│   ├── deploy-demo.yaml
+│   └── ingress-myapp.yaml
 ├── liveness-exec.yaml
 ├── liveness-http.yaml
 ├── myapp-svc-headless.yaml
@@ -24,7 +25,6 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── redis-ds-demo.yaml
 ├── rs-myapp-svc.yaml
 ├── rs-myapp.yaml
-├── service-nodeport.yaml
 └── upDataGit.sh
 
 1 directory, 16 files
