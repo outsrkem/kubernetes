@@ -21,7 +21,7 @@ metadata:
   name: tomcat-deploy
   namespace: default
 spec:
-  replicas: 4
+  replicas: 2
   selector:
     matchLabels:
       app: tomcat
