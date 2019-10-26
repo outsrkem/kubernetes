@@ -35,7 +35,9 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-demo.yaml
     ├── pod-vol-hostpath.yaml
     ├── pod-vol-html-demo.yaml
-    └── pod-vol-nfs.yaml
+    ├── pod-vol-nfs.yaml
+    ├── pod-vol-pvc.yaml
+    └── pv-demo.yaml
 
-2 directories, 25 files
+2 directories, 27 files
 ```
