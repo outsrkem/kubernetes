@@ -30,7 +30,10 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── redis-ds-demo.yaml
 ├── rs-myapp-svc.yaml
 ├── rs-myapp.yaml
-└── upDataGit.sh
+├── upDataGit.sh
+└── volumes
+    ├── pod-vol-demo.yaml
+    └── pod-vol-html-demo.yaml
 
-1 directory, 21 files
+2 directories, 23 files
 ```
