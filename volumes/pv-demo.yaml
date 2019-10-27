@@ -10,12 +10,12 @@ spec:
     server: nfs.k8s.com
   accessModes: ["ReadWriteMany","ReadWriteOnce"] #多人读写，一人读写，简称RWX，RWO
   capacity: #分配磁盘空间大小
-    storage: 1Gi
+    storage: 4Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv002 #注意，定义pv时一定不要加名称空间；因为pv时属于整个集群的，而不是属于某个名称空间，但是pvc时属于某个名称空间的
+  name: pv002
   labels:
     name: pv002
 spec:
@@ -23,13 +23,13 @@ spec:
     path: /data/volumes/v2
     server: nfs.k8s.com
   accessModes: ["ReadWriteOnce"] #一人读写
-  capacity: #分配磁盘空间大小
+  capacity:
     storage: 2Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv003 #注意，定义pv时一定不要加名称空间；因为pv时属于整个集群的，而不是属于某个名称空间，但是pvc时属于某个名称空间的
+  name: pv003
   labels:
     name: pv003
 spec:
@@ -37,13 +37,13 @@ spec:
     path: /data/volumes/v3
     server: nfs.k8s.com
   accessModes: ["ReadOnlyMany","ReadWriteOnce"] #多人只读，一人读写
-  capacity: #分配磁盘空间大小
+  capacity:
     storage: 1Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv004 #注意，定义pv时一定不要加名称空间；因为pv时属于整个集群的，而不是属于某个名称空间，但是pvc时属于某个名称空间的
+  name: pv004
   labels:
     name: pv004
 spec:
@@ -51,13 +51,13 @@ spec:
     path: /data/volumes/v4
     server: nfs.k8s.com
   accessModes: ["ReadOnlyMany"] #多人只读，ROX
-  capacity: #分配磁盘空间大小
+  capacity:
     storage: 1Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv005 #注意，定义pv时一定不要加名称空间；因为pv时属于整个集群的，而不是属于某个名称空间，但是pvc时属于某个名称空间的
+  name: pv005
   labels:
     name: pv005
 spec:
@@ -65,6 +65,6 @@ spec:
     path: /data/volumes/v5
     server: nfs.k8s.com
   accessModes: ["ReadWriteMany","ReadWriteOnce"]
-  capacity: #分配磁盘空间大小
-    storage: 1Gi
+  capacity:
+    storage: 3Gi
 

@@ -7,7 +7,7 @@ spec:
   accessModes: ["ReadWriteMany"] #一定时pv的子集
   resources: #资源限制
     requests:
-      storage: 1Gi #表示我要pvc为1G的空间
+      storage: 3Gi #表示我要pvc为1G的空间
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -15,7 +15,7 @@ metadata:
   name: deploy-pod-vol-pvc
   namespace: default
 spec:
-  replicas: 3
+  replicas: 7
   selector:
     matchLabels:
       app: myapp
