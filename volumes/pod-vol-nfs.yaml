@@ -18,4 +18,4 @@ spec:
   - name: html
     nfs:
       path: /data/volumes
-      server: k8s-node2.com
+      server: nfs.k8s.com
