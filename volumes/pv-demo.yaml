@@ -5,12 +5,14 @@ metadata:
   labels:
     name: pv001
 spec:
+  accessModes: ["ReadWriteMany","ReadWriteOnce"] #多人读写，一人读写，简称RWX，RWO
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: slow
+  capacity: #分配磁盘空间大小
+    storage: 4Gi
   nfs:
     path: /data/volumes/v1
     server: nfs.k8s.com
-  accessModes: ["ReadWriteMany","ReadWriteOnce"] #多人读写，一人读写，简称RWX，RWO
-  capacity: #分配磁盘空间大小
-    storage: 4Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -19,12 +21,12 @@ metadata:
   labels:
     name: pv002
 spec:
-  nfs:
-    path: /data/volumes/v2
-    server: nfs.k8s.com
   accessModes: ["ReadWriteOnce"] #一人读写
   capacity:
     storage: 2Gi
+  nfs:
+    path: /data/volumes/v2
+    server: nfs.k8s.com
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -33,12 +35,12 @@ metadata:
   labels:
     name: pv003
 spec:
-  nfs:
-    path: /data/volumes/v3
-    server: nfs.k8s.com
   accessModes: ["ReadOnlyMany","ReadWriteOnce"] #多人只读，一人读写
   capacity:
     storage: 1Gi
+  nfs:
+    path: /data/volumes/v3
+    server: nfs.k8s.com
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -47,12 +49,12 @@ metadata:
   labels:
     name: pv004
 spec:
-  nfs:
-    path: /data/volumes/v4
-    server: nfs.k8s.com
   accessModes: ["ReadOnlyMany"] #多人只读，ROX
   capacity:
     storage: 1Gi
+  nfs:
+    path: /data/volumes/v4
+    server: nfs.k8s.com
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -61,10 +63,10 @@ metadata:
   labels:
     name: pv005
 spec:
-  nfs:
-    path: /data/volumes/v5
-    server: nfs.k8s.com
   accessModes: ["ReadWriteMany","ReadWriteOnce"]
   capacity:
     storage: 3Gi
+  nfs:
+    path: /data/volumes/v5
+    server: nfs.k8s.com
 

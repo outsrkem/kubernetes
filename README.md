@@ -38,7 +38,8 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-html-demo.yaml
     ├── pod-vol-nfs.yaml
     ├── pod-vol-pvc.yaml
-    └── pv-demo.yaml
+    ├── pv-demo.yaml
+    └── README.md
 
-2 directories, 28 files
+2 directories, 29 files
 ```
