@@ -30,7 +30,3 @@ spec:
     persistentVolumeClaim:
      claimName: mypvc
 
-
-
-
-

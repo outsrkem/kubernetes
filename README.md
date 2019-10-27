@@ -32,6 +32,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── rs-myapp.yaml
 ├── upDataGit.sh
 └── volumes
+    ├── deploy-vol-pvc.yaml
     ├── pod-vol-demo.yaml
     ├── pod-vol-hostpath.yaml
     ├── pod-vol-html-demo.yaml
@@ -39,5 +40,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-2 directories, 27 files
+2 directories, 28 files
 ```
