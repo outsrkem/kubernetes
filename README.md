@@ -10,10 +10,15 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ```
 .
 ├── configmap
+│   ├── game
+│   │   ├── game.properties
+│   │   ├── pod-single-configmap-env-variable.yaml
+│   │   └── ui.properties
 │   ├── nginx-www
 │   ├── pod-configmap-2.yaml
 │   ├── pod-configmap-3.yaml
-│   └── pod-configmap.yaml
+│   ├── pod-configmap.yaml
+│   └── pod-secret-1.yaml
 ├── deploy-myapp.yaml
 ├── ingress
 │   ├── deploy-demo.yaml
@@ -46,5 +51,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pv-demo.yaml
     └── README.md
 
-3 directories, 33 files
+4 directories, 37 files
 ```
