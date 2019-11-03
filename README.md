@@ -9,6 +9,11 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 
 ```
 .
+├── configmap
+│   ├── nginx-www
+│   ├── pod-configmap-2.yaml
+│   ├── pod-configmap-3.yaml
+│   └── pod-configmap.yaml
 ├── deploy-myapp.yaml
 ├── ingress
 │   ├── deploy-demo.yaml
@@ -41,5 +46,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pv-demo.yaml
     └── README.md
 
-2 directories, 29 files
+3 directories, 33 files
 ```
