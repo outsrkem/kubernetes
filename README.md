@@ -40,6 +40,8 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── redis-ds-demo.yaml
 ├── rs-myapp-svc.yaml
 ├── rs-myapp.yaml
+├── stateful
+│   └── stateful-demo.yaml
 ├── upDataGit.sh
 └── volumes
     ├── deploy-vol-pvc.yaml
@@ -50,5 +52,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-4 directories, 36 files
+5 directories, 37 files
 ```
