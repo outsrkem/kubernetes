@@ -28,6 +28,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── tls.crt
 │   ├── tls.key
 │   └── tomcat-demo.yaml
+├── k8s\347\254\224\350\256\260.md
 ├── liveness-exec.yaml
 ├── liveness-http.yaml
 ├── myapp-svc-headless.yaml
@@ -52,5 +53,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-5 directories, 37 files
+5 directories, 38 files
 ```
