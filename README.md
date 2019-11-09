@@ -41,6 +41,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── rs-myapp-svc.yaml
 ├── rs-myapp.yaml
 ├── stateful
+│   ├── pv-demo.yaml
 │   └── stateful-demo.yaml
 ├── upDataGit.sh
 └── volumes
@@ -52,5 +53,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-5 directories, 37 files
+5 directories, 38 files
 ```
