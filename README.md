@@ -28,6 +28,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── tls.crt
 │   ├── tls.key
 │   └── tomcat-demo.yaml
+├── kubernetes-dashboard.yaml
 ├── liveness-exec.yaml
 ├── liveness-http.yaml
 ├── myapp-svc-headless.yaml
@@ -53,5 +54,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-5 directories, 38 files
+5 directories, 39 files
 ```
