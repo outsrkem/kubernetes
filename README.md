@@ -20,8 +20,11 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── pod-configmap.yaml
 │   └── pod-secret-1.yaml
 ├── dashboard
+│   ├── dashboard-admin-bind-cluster-role.yaml
 │   ├── dashboard-adminuser.yaml
-│   └── kubernetes-dashboard.yaml
+│   ├── dashboard-admin.yaml
+│   ├── kubernetes-dashboard.yaml
+│   └── recommended.yaml
 ├── deploy-myapp.yaml
 ├── ingress
 │   ├── deploy-demo.yaml
@@ -56,5 +59,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-6 directories, 40 files
+6 directories, 43 files
 ```
