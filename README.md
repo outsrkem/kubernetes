@@ -36,6 +36,14 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   └── tomcat-demo.yaml
 ├── liveness-exec.yaml
 ├── liveness-http.yaml
+├── metrics-server
+│   ├── aggregated-metrics-reader.yaml
+│   ├── auth-delegator.yaml
+│   ├── auth-reader.yaml
+│   ├── metrics-apiservice.yaml
+│   ├── metrics-server-deployment.yaml
+│   ├── metrics-server-service.yaml
+│   └── resource-reader.yaml
 ├── myapp-svc-headless.yaml
 ├── myapp-svc.yaml
 ├── pod-demo.yaml
@@ -59,5 +67,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-6 directories, 43 files
+7 directories, 50 files
 ```
