@@ -19,6 +19,9 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── pod-configmap-3.yaml
 │   ├── pod-configmap.yaml
 │   └── pod-secret-1.yaml
+├── dashboard
+│   ├── dashboard-adminuser.yaml
+│   └── kubernetes-dashboard.yaml
 ├── deploy-myapp.yaml
 ├── ingress
 │   ├── deploy-demo.yaml
@@ -28,7 +31,6 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── tls.crt
 │   ├── tls.key
 │   └── tomcat-demo.yaml
-├── kubernetes-dashboard.yaml
 ├── liveness-exec.yaml
 ├── liveness-http.yaml
 ├── myapp-svc-headless.yaml
@@ -54,5 +56,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-5 directories, 39 files
+6 directories, 40 files
 ```
