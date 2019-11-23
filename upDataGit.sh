@@ -1,7 +1,7 @@
 #!/bin/bash
 # Sun Oct 13 15:42:19 CST 2019
 # 把本地文件推送到git 仓库
-echo "shell run PID $$"
+echo "shell run PID : $$"
 cat > README.md << EOF
 # kubernetes
 
