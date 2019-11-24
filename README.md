@@ -53,8 +53,13 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── redis-ds-demo-svc.yaml
 ├── redis-ds-demo.yaml
 ├── required-Affinity-demo-pod.yaml
+├── required-anti-Affinity-demo-pod.yaml
 ├── rs-myapp-svc.yaml
 ├── rs-myapp.yaml
+├── schedule
+│   ├── deploy-myapp.yaml
+│   ├── required-Affinity-demo-pod.yaml
+│   └── required-anti-Affinity-demo-pod.yaml
 ├── stateful
 │   ├── pv-demo.yaml
 │   └── stateful-demo.yaml
@@ -68,5 +73,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-7 directories, 51 files
+8 directories, 55 files
 ```
