@@ -1,0 +1,20 @@
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: pod-demo-metrics
+  namespace: default
+  labels:
+    app: myapp
+    tier: frontend
+spec:
+  containers:
+  - name: myapp
+    image: ikubernetes/stress-ng:v1
+    command: ["/usr/bin/stress-ng", "-c 1", "--metrics-brief"]
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "256Mi"
+      limits:
+        cpu: "1"
+        memory: "512Mi"
