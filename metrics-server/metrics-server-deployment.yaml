@@ -31,8 +31,9 @@ spec:
       - name: metrics-server
         image: bluersw/metrics-server-amd64:v0.3.6
         imagePullPolicy: IfNotPresent
-        command: #增加
-        - /metrics-server
+        #command: #增加
+        args: 
+        #- /metrics-server
         - --kubelet-preferred-address-types=InternalIP
         - --kubelet-insecure-tls
         ports:
