@@ -1,6 +1,8 @@
 #!/bin/bash
 # Sun Oct 13 15:42:19 CST 2019
 # 把本地文件推送到git 仓库
+SHHOME=$(cd `dirname $0`; pwd)
+cd $SHHOME
 echo "shell run PID : $$"
 cat > README.md << EOF
 # kubernetes
