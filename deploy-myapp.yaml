@@ -17,7 +17,7 @@ spec: #这里是指的是控制器的spec
     spec: #这里是pod的spec
       containers:
       - name: myapp
-        image: ikubernetes/myapp:v1
+        image: ikubernetes/myapp:v2
         imagePullPolicy: IfNotPresent
         ports:
           - name: http
