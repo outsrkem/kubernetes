@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-sa-deploy
+  namespace: default
+spec: #这里是指的是控制器的spec
+  replicas: 5 #几个副本
+  selector:   #标签选择器
+    matchLabels: #攥着键值对模式
+      app: myapp
+      release: canary
+  template: #pod模板
+    metadata:
+      labels: #要跟标签选择器是一样的
+        app: myapp
+        release: canary
+    spec: #这里是pod的spec
+      containers:
+      - name: myapp
+        image: ikubernetes/myapp:v2
+        imagePullPolicy: IfNotPresent
+      serviceAccountName: mysa

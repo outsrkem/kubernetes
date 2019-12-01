@@ -26,6 +26,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── kubernetes-dashboard.yaml
 │   └── recommended.yaml
 ├── deploy-myapp.yaml
+├── deploy-sa-myapp.yaml
 ├── heapster
 │   ├── grafana.yaml
 │   ├── heapster-rbac.yaml
@@ -90,5 +91,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-12 directories, 68 files
+12 directories, 69 files
 ```
