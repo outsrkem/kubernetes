@@ -63,7 +63,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── myapp-svc.yaml
 ├── pod-demo.yaml
 ├── poststart-pod.yaml
-├── RBAC
+├── rbac
 │   └── role.yaml
 ├── readiness-httpget.yaml
 ├── README.md
