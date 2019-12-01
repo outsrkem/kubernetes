@@ -63,6 +63,8 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── myapp-svc.yaml
 ├── pod-demo.yaml
 ├── poststart-pod.yaml
+├── RBAC
+│   └── role.yaml
 ├── readiness-httpget.yaml
 ├── README.md
 ├── redis-ds-demo-svc.yaml
@@ -88,5 +90,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-11 directories, 67 files
+12 directories, 68 files
 ```

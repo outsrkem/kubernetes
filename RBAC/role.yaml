@@ -1,0 +1,37 @@
+---
+# 新建K8S内建用户sa
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: default
+  name: iyunw-sa
+
+
+---
+# 新建权限Role
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: default  ## 指定它能产生作用的Namespace
+  name: iyunw-role
+rules:    ##  定义权限规则
+- apiGroups: [""]
+  resources: ["pods"]  ## 对mynamespace下面的Pod对象
+  verbs: ["get", "watch", "list"]   ## 进行GET、WATCH、LIST操作
+
+
+---
+# 建立角色绑定
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: iyunw-rolebinding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: iyunw
+  namespace: default
+roleRef:
+  kind: Role
+  name: iyunw-role
+  apiGroup: rbac.authorization.k8s.io
