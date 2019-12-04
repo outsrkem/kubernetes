@@ -69,6 +69,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── clusterrole-demo.yaml
 │   ├── rolebinding-clusterrole-demo.yaml
 │   ├── rolebinding-demo.yaml
+│   ├── rolebinding-ns-admin-demo.yaml
 │   ├── role-deml.yaml
 │   └── test.role.yaml
 ├── readiness-httpget.yaml
@@ -96,5 +97,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-12 directories, 74 files
+12 directories, 75 files
 ```
