@@ -65,7 +65,9 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── pod-demo.yaml
 ├── poststart-pod.yaml
 ├── rbac
-│   └── role.yaml
+│   ├── rolebinding-demo.yaml
+│   ├── role-deml.yaml
+│   └── test.role.yaml
 ├── readiness-httpget.yaml
 ├── README.md
 ├── redis-ds-demo-svc.yaml
@@ -91,5 +93,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-12 directories, 69 files
+12 directories, 71 files
 ```
