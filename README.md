@@ -50,8 +50,6 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── metrics-server-deployment.yaml
 │   ├── metrics-server-service.yaml
 │   └── resource-reader.yaml
-├── metrics
-│   └── pod-demo.yaml
 ├── metrics-server
 │   ├── aggregated-metrics-reader.yaml
 │   ├── auth-delegator.yaml
@@ -59,6 +57,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── metrics-apiservice.yaml
 │   ├── metrics-server-deployment.yaml
 │   ├── metrics-server-service.yaml
+│   ├── pod-demo.yaml
 │   └── resource-reader.yaml
 ├── myapp-svc-headless.yaml
 ├── myapp-svc.yaml
@@ -97,5 +96,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-12 directories, 75 files
+11 directories, 75 files
 ```
