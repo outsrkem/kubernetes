@@ -39,4 +39,4 @@ spec:
   - name: http
     targetPort: 8099 #这里是容器端口
     port: 8099 #这是 service 端口
-    nodePort: 30099
+    nodePort: 30099 # 这是主机监听端口
