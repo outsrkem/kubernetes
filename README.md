@@ -25,6 +25,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   └── recommended.yaml
 ├── deploy-myapp.yaml
 ├── deploy-sa-myapp.yaml
+├── deploy-zkweb.yaml
 ├── heapster
 │   ├── grafana.yaml
 │   ├── heapster-rbac.yaml
@@ -94,5 +95,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-11 directories, 73 files
+11 directories, 74 files
 ```

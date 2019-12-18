@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zkweb-deploy
+  namespace: default
+spec: #这里是指的是控制器的spec
+  replicas: 3 #几个副本
+  selector:   #标签选择器
+    matchLabels: #攥着键值对模式
+      app: zkweb
+      release: canary
+  template: #pod模板
+    metadata:
+      labels: #要跟标签选择器是一样的
+        app: zkweb
+        release: canary
+    spec: #这里是pod的spec
+      containers:
+      - name: myapp
+        image: harbor.hub.com/library/zkweb:latest
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: 8099
+      imagePullSecrets:
+      - name: myhub
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-zkweb
+  namespace: default
+spec:
+  selector:
+    app: zkweb
+    release: canary
+  type: NodePort
+  ports:
+  - name: http
+    targetPort: 8099 #这里是容器端口
+    port: 8099 #这是 service 端口
+    nodePort: 30099
