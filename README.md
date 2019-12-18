@@ -74,6 +74,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── README.md
 ├── redis-ds-demo-svc.yaml
 ├── redis-ds-demo.yaml
+├── registrykey-myhub.yml
 ├── required-Affinity-demo-pod.yaml
 ├── required-anti-Affinity-demo-pod.yaml
 ├── rs-myapp-svc.yaml
@@ -95,5 +96,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-11 directories, 74 files
+11 directories, 75 files
 ```
