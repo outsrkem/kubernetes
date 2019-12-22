@@ -62,7 +62,6 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── myapp-svc.yaml
 ├── pod-demo.yaml
 ├── poststart-pod.yaml
-├── qweqweqwe.yml
 ├── rbac
 │   ├── clusterrolebinding-demo.yaml
 │   ├── clusterrole-demo.yaml
@@ -97,5 +96,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── pod-vol-pvc.yaml
     └── pv-demo.yaml
 
-11 directories, 76 files
+11 directories, 75 files
 ```
