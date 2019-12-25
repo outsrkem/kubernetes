@@ -22,6 +22,7 @@
 #   name: kubernetes-dashboard-certs
 #   namespace: kube-system
 # type: Opaque
+
 ---
 # ------------------- Dashboard Service Account ------------------- #
 
