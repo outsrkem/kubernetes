@@ -1,0 +1,54 @@
+# kube-controller-manager
+
+
+# 环境
+# 10.10.10.10 master etcd1
+# 10.10.10.11 node01 etcd2
+# 10.10.10.12 node02 etcd3
+
+# 说明：
+# 只在master节点部署
+# 命令在 apiserver 的包里面
+
+
+
+cat << 'EOF' > /opt/kubernetes/cfg/kube-controller-manager.conf
+KUBE_CONTROLLER_MANAGER_OPTS="--address=127.0.0.1 \
+--master=http://127.0.0.1:8080 \
+--allocate-node-cidrs=true \
+--service-cluster-ip-range=10.254.0.0/16 \
+--cluster-cidr=172.20.0.0/16 \
+--cluster-name=kubernetes \
+--cluster-signing-cert-file=/opt/kubernetes/ssl/ca.pem \
+--cluster-signing-key-file=/opt/kubernetes/ssl/ca-key.pem \
+--service-account-private-key-file=/opt/kubernetes/ssl/ca-key.pem \
+--root-ca-file=/opt/kubernetes/ssl/ca.pem \
+--leader-elect=true \
+--v=4 \
+--logtostderr=true"
+EOF
+
+
+cat << 'EOF' > /usr/lib/systemd/system/kube-controller-manager.service
+[Unit] 
+Description=Kubernetes Controller Manager 
+[Service]
+EnvironmentFile=/opt/kubernetes/cfg/kube-controller-manager.conf
+ExecStart=/opt/kubernetes/bin/kube-controller-manager $KUBE_CONTROLLER_MANAGER_OPTS
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+[Install]
+WantedBy=multi-user.target
+EOF
+
+
+
+systemctl daemon-reload 
+systemctl restart kube-controller-manager.service
+systemctl status kube-controller-manager.service
+systemctl enable kube-controller-manager.service
+
+
+
+

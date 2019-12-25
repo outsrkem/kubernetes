@@ -1,0 +1,58 @@
+[root@master kubernetes]# kubectl get csr
+NAME                                                   AGE   REQUESTOR           CONDITION
+node-csr-TgTr2FQt3xjgoSTM2l9SBmaDzcq6oc-0ZkFYvAHvi10   38m   kubelet-bootstrap   Pending
+node-csr-ZSUsGrr_9Bh7ilwSjX2BGu9C2mspAKj-HNyF4UiOnmA   36m   kubelet-bootstrap   Pending
+node-csr-byYIMgIGxzfT72rHhS4Oco_HABiFt8SJhgIcq4G9vjU   33m   kubelet-bootstrap   Pending
+[root@master kubernetes]# kubectl certificate approve node-csr-TgTr2FQt3xjgoSTM2l9SBmaDzcq6oc-0ZkFYvAHvi10
+certificatesigningrequest.certificates.k8s.io/node-csr-TgTr2FQt3xjgoSTM2l9SBmaDzcq6oc-0ZkFYvAHvi10 approved
+[root@master kubernetes]# kubectl certificate approve node-csr-ZSUsGrr_9Bh7ilwSjX2BGu9C2mspAKj-HNyF4UiOnmA
+certificatesigningrequest.certificates.k8s.io/node-csr-ZSUsGrr_9Bh7ilwSjX2BGu9C2mspAKj-HNyF4UiOnmA approved
+[root@master kubernetes]# kubectl certificate approve node-csr-byYIMgIGxzfT72rHhS4Oco_HABiFt8SJhgIcq4G9vjU
+certificatesigningrequest.certificates.k8s.io/node-csr-byYIMgIGxzfT72rHhS4Oco_HABiFt8SJhgIcq4G9vjU approved
+[root@master kubernetes]# kubectl get nodes 
+NAME          STATUS   ROLES        AGE   VERSION
+10.10.10.10   Ready    k8s-master   2s    v1.13.1
+10.10.10.11   Ready    <none>       9s    v1.13.1
+10.10.10.12   Ready    <none>       17s   v1.13.1
+
+[root@master kubernetes]# kubectl get node,cs
+NAME               STATUS   ROLES        AGE   VERSION
+node/10.10.10.10   Ready    k8s-master   44s   v1.13.1
+node/10.10.10.11   Ready    <none>       51s   v1.13.1
+node/10.10.10.12   Ready    <none>       59s   v1.13.1
+
+NAME                                 STATUS    MESSAGE             ERROR
+componentstatus/controller-manager   Healthy   ok                  
+componentstatus/scheduler            Healthy   ok                  
+componentstatus/etcd-0               Healthy   {"health":"true"}   
+componentstatus/etcd-1               Healthy   {"health":"true"}   
+componentstatus/etcd-2               Healthy   {"health":"true"}   
+
+
+
+kubectl label nodes 10.10.10.10 node-role.kubernetes.io/master=
+kubectl label nodes 10.10.10.11 node-role.kubernetes.io/node=
+kubectl label nodes 10.10.10.12 node-role.kubernetes.io/node=
+# 由于master负责的事情比较多，所以我们可以给master标记污点不接受负载
+kubectl taint nodes 10.10.10.10 node-role.kubernetes.io/master=true:NoSchedule
+此时查看：
+# 此时节点状态为 NotReady
+# ROLES已经标识出了master和node
+
+
+
+openssl x509 -req -in magedu.csr -CA ca.pem -CAkey ca-key.pem \
+-CAcreateserial -out magedu.crt -days 3650
+
+kubectl config set-credentials magedu \
+--client-certificate=./magedu.crt --client-key=./magedu.key --embed-certs=true
+
+kubectl config set-context magedu@kubernetes --cluster=kubernetes --user=magedu
+
+
+
+创建集群管理员kubernetes-admin
+kubectl config set-credentials kubernetes-admin \
+--client-certificate=./ca.pem --client-key=./ca-key.pem --embed-certs=true
+
+kubectl config set-context kubernetes-admin@kubernetes --cluster=kubernetes --user=kubernetes-admin

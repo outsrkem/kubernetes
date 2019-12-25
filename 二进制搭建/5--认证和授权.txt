@@ -1,0 +1,106 @@
+
+# 节点            IP                组件
+# k8s-master  10.10.10.10   etcd,kube-apiserver,kube-controller-manager,kube-scheduler,kubelet,flannel
+# k8s-node1   10.10.10.11   etcd,kubelet,flannel,kube-proxy,docker
+# k8s-node2   10.10.10.12   etcd,kubelet,flannel,kube-proxy,docker
+
+# 环境
+# 10.10.10.10 master etcd1 k8s.etcd1.ser
+# 10.10.10.11 node01 etcd2 k8s.etcd2.ser
+# 10.10.10.12 node02 etcd3 k8s.etcd3.ser
+
+# 创建 kubelet bootstrapping kubeconfig， kube-proxy kubeconfig，以及admin kubeconfig
+# 如果想把master也加入node中在master上进行以下操作
+# kubelet、kube-proxy 等 Node 机器上的进程与 Master 机器的 kube-apiserver 进程通信时需要认证和授权；
+# kubernetes 1.4 开始支持由 kube-apiserver 为客户端生成 TLS 证书的 TLS Bootstrapping 功能，这样就不需要为每个客户端生成证书了；所以下面的操作都在master操作。
+# 由于kube-apiserver需要， token文件上面已经在部署kube-apiserver时创建
+
+# 创建 kubelet bootstrapping kubeconfig 文件
+# 设置集群参数
+cd /opt/kubernetes/cfg 
+export KUBE_APISERVER="https://10.10.10.10:6443"
+export PATH=$PATH:/opt/kubernetes/bin
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/opt/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=bootstrap.kubeconfig
+kubectl config set-credentials kubelet-bootstrap \
+  --token=`cat /opt/kubernetes/cfg/token.csv |awk -F',' '{print $1}'` \
+  --kubeconfig=bootstrap.kubeconfig
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kubelet-bootstrap \
+  --kubeconfig=bootstrap.kubeconfig
+kubectl config use-context default --kubeconfig=bootstrap.kubeconfig
+kubectl config use-context default --kubeconfig=bootstrap.kubeconfig
+
+# 创建 kube-proxy kubeconfig 文件
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/opt/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=kube-proxy.kubeconfig
+kubectl config set-credentials kube-proxy \
+  --client-certificate=/opt/kubernetes/ssl/kube-proxy.pem \
+  --client-key=/opt/kubernetes/ssl/kube-proxy-key.pem \
+  --embed-certs=true \
+  --kubeconfig=kube-proxy.kubeconfig
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kube-proxy \
+  --kubeconfig=kube-proxy.kubeconfig
+kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+# 分发至node1， node2
+scp bootstrap.kubeconfig kube-proxy.kubeconfig node1:/opt/kubernetes/cfg/
+scp bootstrap.kubeconfig kube-proxy.kubeconfig node2:/opt/kubernetes/cfg/
+# 绑定授权
+kubectl create clusterrolebinding kubelet-bootstrap \
+  --clusterrole=system:node-bootstrapper \
+  --user=kubelet-bootstrap
+
+
+
+# BOOTSTRAP_TOKEN 将被写入到 kube-apiserver 使用的 token.csv 文件和 kubelet 使用的 bootstrap.kubeconfig 文件，如果后续重新生成了 BOOTSTRAP_TOKEN，则需要： 
+# 4.1.更新 token.csv 文件，分发到所有机器 (master 和 node）的 /opt/kubernetes/cfg/ 目录下，分发到node节点上非必需； 
+# 4.2.重新生成 bootstrap.kubeconfig 文件，分发到所有 node 机器的/opt/kubernetes/cfg/目录下； 
+# 4.3.重启 kube-apiserver 和 kubelet 进程； 
+# 4.4.重新 approve kubelet 的 csr 请求； 
+# 创建 admin kubeconfig（和前面的证书有关）,即创建集群管理员
+
+cd /opt/kubernetes/cfg
+export KUBE_APISERVER="https://10.10.10.10:6443"
+# 设置 kubeconfig 文件中的一个 context 条目
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/opt/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=admin.conf
+# 创建 kubernetes-admin 用户并添加至 config 
+kubectl config set-credentials kubernetes-admin \
+  --client-certificate=/opt/kubernetes/ssl/admin.pem \
+  --client-key=/opt/kubernetes/ssl/admin-key.pem \
+  --embed-certs=true \
+  --kubeconfig=admin.conf
+# 把 kubernetes-admin 绑定在 kubernetes 集群
+kubectl config set-context kubernetes-admin@kubernetes \
+  --cluster=kubernetes \
+  --user=kubernetes-admin \
+  --kubeconfig=admin.conf
+# 切换用户
+kubectl config use-context kubernetes-admin@kubernetes \
+  --kubeconfig=admin.conf
+# 绑定授权
+kubectl create clusterrolebinding kubernetes-admin \
+  --clusterrole=cluster-admin \
+  --user=kubernetes-admin
+# 这个不绑定就不能交互式进入pods
+kubectl create clusterrolebinding system:anonymous --clusterrole=cluster-admin --user=system:anonymous
+
+mkdir -p $HOME/.kube
+cp -i admin.conf $HOME/.kube/config
+
+# 查看集群信息，此时该文件即具有访问集群的权限
+kubectl cluster-info
+kubectl config view
+

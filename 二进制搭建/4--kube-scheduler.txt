@@ -1,0 +1,41 @@
+# kube-scheduler
+
+# 环境
+# 10.10.10.10 master etcd1
+# 10.10.10.11 node01 etcd2
+# 10.10.10.12 node02 etcd3
+
+# 说明：
+# 只在master节点部署
+# 命令在 apiserver 的包里面
+
+
+cat << 'EOF' > /opt/kubernetes/cfg/kube-scheduler.conf
+KUBE_SCHEDULER_OPTS="--master=127.0.0.1:8080 \
+--logtostderr=true \
+--v=4 \
+--leader-elect"
+EOF
+
+
+
+cat << 'EOF' > /usr/lib/systemd/system/kube-scheduler.service
+[Unit] 
+Description=Kubernetes Scheduler 
+Documentation=https://github.com/kubernetes/kubernetes 
+[Service] 
+EnvironmentFile=/opt/kubernetes/cfg/kube-scheduler.conf 
+ExecStart=/opt/kubernetes/bin/kube-scheduler $KUBE_SCHEDULER_OPTS 
+Restart=on-failure 
+[Install] 
+WantedBy=multi-user.target 
+EOF
+
+
+
+
+
+systemctl daemon-reload 
+systemctl restart kube-scheduler
+systemctl status kube-scheduler
+systemctl enable kube-scheduler

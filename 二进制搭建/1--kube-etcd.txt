@@ -1,0 +1,135 @@
+﻿# kube-etcd
+
+# 环境
+# 10.10.10.10 master etcd1 k8s.etcd1.ser
+# 10.10.10.11 node01 etcd2 k8s.etcd2.ser
+# 10.10.10.12 node02 etcd3 k8s.etcd3.ser
+
+
+
+# 说明：
+# 三个etcd节点都要部署
+
+mkdir -p /opt/kubernetes/{cfg,data,bin,data,ssl}
+mkdir -p /opt/kubernetes/data/etcd
+
+tar xf etcd-v3.3.10-linux-amd64.tar.gz
+mv etcd-v3.3.10-linux-amd64/etcd* /opt/kubernetes/bin/
+
+
+# 生成etcd 证书，参照创建证书
+# 集群启动，3个节点需要同时启动
+# master etcd1
+
+cat << 'EOF' > /opt/kubernetes/cfg/kube-etcd.conf 
+KUBE_ETCD_OPTS="--name=etcd1 \
+--data-dir=/opt/kubernetes/data/etcd \
+--listen-peer-urls=https://10.10.10.10:2380 \
+--listen-client-urls=https://10.10.10.10:2379,http://127.0.0.1:2379 \
+--initial-advertise-peer-urls=https://10.10.10.10:2380 \
+--initial-cluster-token=etcd-cluster \
+--advertise-client-urls=https://10.10.10.10:2379 \
+--cert-file=/opt/kubernetes/ssl/etcd.pem \
+--key-file=/opt/kubernetes/ssl/etcd-key.pem \
+--peer-cert-file=/opt/kubernetes/ssl/etcd.pem \
+--peer-key-file=/opt/kubernetes/ssl/etcd-key.pem \
+--trusted-ca-file=/opt/kubernetes/ssl/ca.pem \
+--peer-trusted-ca-file=/opt/kubernetes/ssl/ca.pem \
+--initial-cluster etcd1=https://10.10.10.10:2380,etcd2=https://10.10.10.11:2380,etcd3=https://10.10.10.12:2380 \
+--initial-cluster-state=new"
+EOF
+
+
+# 配置文件创建
+
+# node02 etcd2
+
+cat << 'EOF' > /opt/kubernetes/cfg/kube-etcd.conf
+KUBE_ETCD_OPTS="--name=etcd2 \
+--data-dir=/opt/kubernetes/data/etcd \
+--listen-peer-urls=https://10.10.10.11:2380 \
+--listen-client-urls=https://10.10.10.11:2379,http://127.0.0.1:2379 \
+--initial-advertise-peer-urls=https://10.10.10.11:2380 \
+--initial-cluster-token=etcd-cluster \
+--advertise-client-urls=https://10.10.10.11:2379 \
+--cert-file=/opt/kubernetes/ssl/etcd.pem \
+--key-file=/opt/kubernetes/ssl/etcd-key.pem \
+--peer-cert-file=/opt/kubernetes/ssl/etcd.pem \
+--peer-key-file=/opt/kubernetes/ssl/etcd-key.pem \
+--trusted-ca-file=/opt/kubernetes/ssl/ca.pem \
+--peer-trusted-ca-file=/opt/kubernetes/ssl/ca.pem \
+--initial-cluster etcd1=https://10.10.10.10:2380,etcd2=https://10.10.10.11:2380,etcd3=https://10.10.10.12:2380 \
+--initial-cluster-state=new"
+EOF
+
+
+# node02 etcd3
+
+cat << 'EOF' > /opt/kubernetes/cfg/kube-etcd.conf
+KUBE_ETCD_OPTS="--name=etcd3 \
+--data-dir=/opt/kubernetes/data/etcd \
+--listen-peer-urls=https://10.10.10.12:2380 \
+--listen-client-urls=https://10.10.10.12:2379,http://127.0.0.1:2379 \
+--initial-advertise-peer-urls=https://10.10.10.12:2380 \
+--initial-cluster-token=etcd-cluster \
+--advertise-client-urls=https://10.10.10.12:2379 \
+--cert-file=/opt/kubernetes/ssl/etcd.pem \
+--key-file=/opt/kubernetes/ssl/etcd-key.pem \
+--peer-cert-file=/opt/kubernetes/ssl/etcd.pem \
+--peer-key-file=/opt/kubernetes/ssl/etcd-key.pem \
+--trusted-ca-file=/opt/kubernetes/ssl/ca.pem \
+--peer-trusted-ca-file=/opt/kubernetes/ssl/ca.pem \
+--initial-cluster etcd1=https://10.10.10.10:2380,etcd2=https://10.10.10.11:2380,etcd3=https://10.10.10.12:2380 \
+--initial-cluster-state=new"
+EOF
+
+
+# 创建system脚本，3个节点相同一样
+
+cat << 'EOF' > /usr/lib/systemd/system/etcd.service 
+[Unit]
+Description=Etcd Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+Documentation=https://github.com/coreos
+[Service]
+Type=notify
+WorkingDirectory=/opt/kubernetes/data/etcd
+EnvironmentFile=/opt/kubernetes/cfg/kube-etcd.conf
+ExecStart=/opt/kubernetes/bin/etcd $KUBE_ETCD_OPTS
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+[Install]
+WantedBy=multi-user.target
+EOF
+
+
+# 3台同时执行启动
+
+systemctl daemon-reload 
+systemctl restart etcd 
+systemctl status etcd 
+systemctl enable etcd 
+
+
+
+# 集群查看
+# 由于我们做了https，所以必须用明证书查看
+
+# 方法一:
+export PATH=$PATH:/opt/kubernetes/bin
+cd /opt/kubernetes/ssl
+etcdctl --ca-file=ca.pem --cert-file=etcd.pem --key-file=etcd-key.pem cluster-health
+etcdctl --ca-file=ca.pem --cert-file=etcd.pem --key-file=etcd-key.pem member list
+
+# 方法二:做个别名
+alias etcdctl="etcdctl \
+--endpoints='https://10.10.10.10:2379,https://10.10.10.11:2379,https://10.10.10.12:2379' \
+--ca-file=/opt/kubernetes/ssl/ca.pem \
+--cert-file=/opt/kubernetes/ssl/kubernetes.pem \
+--key-file=/opt/kubernetes/ssl/kubernetes-key.pem"
+
+etcdctl cluster-health
+etcdctl member list

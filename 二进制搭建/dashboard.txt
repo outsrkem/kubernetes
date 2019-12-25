@@ -1,0 +1,89 @@
+wget https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+wget https://gitee.com/Outsrkem/kubernetes/raw/master/dashboard/kubernetes-dashboard-k8sv1.13.yaml
+
+mkdir certs
+
+(umask 077; openssl genrsa -out ./certs/dashboard.key 2048)
+
+openssl req -new -key ./certs/dashboard.key -out ./certs/dashboard.csr \
+-subj "/O=yong/CN=kubernetes-dashboard"
+
+
+openssl x509 -req -in ./certs/dashboard.csr -CA ./ca.pem -CAkey ./ca-key.pem \
+-CAcreateserial -out ./certs/dashboard.crt -days 3650
+
+# 创建 secret
+kubectl create secret generic kubernetes-dashboard-certs \
+--from-file=dashboard.crt=./certs/dashboard.crt \
+--from-file=dashboard.key=./certs/dashboard.key -n kube-system
+
+# 打个标签
+kubectl -n kube-system label secrets kubernetes-dashboard-certs k8s-app=kubernetes-dashboard
+
+
+kubectl apply -f kubernetes-dashboard.yaml
+
+
+kubectl -n kube-system describe secret \
+$(kubectl -n kube-system get secret | grep kubernetes-dashboard-token | awk '{print $1}')
+
+# 创建dashboard用户
+https://gitee.com/Outsrkem/kubernetes/raw/master/dashboard/dashboard-adminuser-k8sv1.13.yaml
+
+cat << 'EOF' > dashboard-adminuser.yaml
+# ## 使用命令创建
+# kubectl -n kube-system create clusterrolebinding kubernetes-dashboard-minimal \
+# --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard \
+# --dry-run -o yaml 
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-dashboard-minimal
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard
+  namespace: kube-system
+EOF
+
+
+
+# 测试登录地址
+https://10.10.10.10:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login
+# 常规访问地址
+https://10.10.10.10:6443
+
+
+# ----
+# 使用config文件认证
+export KUBE_APISERVER="https://10.10.10.10:6443"
+export CONFIG_PATH_DIR=./dashborad/admin.conf
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/opt/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=${CONFIG_PATH_DIR}
+
+export DASHBOARD_SECRETS_NAME=$( kubectl -n kube-system get secret |\
+  awk '/^kubernetes-dashboard-token/{print $1}')
+
+export DASHBOARD_ADMIN_TOKEN=$(kubectl -n kube-system get \
+  secrets $DASHBOARD_SECRETS_NAME -o jsonpath={.data.token}|base64 -d)
+kubectl config set-credentials dashboard-admin \
+  --token=${DASHBOARD_ADMIN_TOKEN} \
+  --kubeconfig=${CONFIG_PATH_DIR}
+
+kubectl config set-context dashboard-admin@kubernetes \
+  --cluster=kubernetes \
+  --user=dashboard-admin \
+  --kubeconfig=${CONFIG_PATH_DIR}
+
+kubectl config use-context dashboard-admin@kubernetes \
+  --kubeconfig=${CONFIG_PATH_DIR}
+
+kubectl config view --kubeconfig=${CONFIG_PATH_DIR}

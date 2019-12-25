@@ -1,0 +1,73 @@
+# kube-apiserver
+
+# 环境
+# 10.10.10.10 master etcd1 k8s.etcd1.ser
+# 10.10.10.11 node01 etcd2 k8s.etcd2.ser
+# 10.10.10.12 node02 etcd3 k8s.etcd3.ser
+
+# 说明：
+# 只在master节点部署
+
+tar xf kubernetes-server-linux-amd64.tar.gz
+cd kubernetes/server/bin
+cp kubectl kube-scheduler kube-apiserver kube-controller-manager /opt/kubernetes/bin/
+
+# 创建token.csv 可以是任意的包涵128 bit的字符串，可以使用安全的随机数发生器生成。生成随机字符
+# head -c 16 /dev/urandom | od -An -t x | tr -d ' ' 
+# 说明：
+# 第一列：随机字符串，自己可生成
+# 第二列：用户名
+# 第三列：UID
+# 第四列：用户组
+
+cat << EOF > ${KUBE_ROOT_DIR}/cfg/token.csv
+`head -c 16 /dev/urandom | od -An -t x | tr -d ' '`,kubelet-bootstrap,10001,"system:kubelet-bootstrap"
+EOF
+
+# 创建system脚本
+cat << EOF > /usr/lib/systemd/system/kube-apiserver.service
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+[Service]
+Restart=on-failure
+ExecStart=/opt/kubernetes/bin/kube-apiserver \\
+  --logtostderr=true \\
+  --v=4 \\
+  --etcd-servers=https://10.10.10.10:2379,https://10.10.10.11:2379,https://10.10.10.12:2379 \\
+  --bind-address=10.10.10.10 \\
+  --secure-port=6443 \\
+  --advertise-address=10.10.10.10 \\
+  --allow-privileged=true \\
+  --service-cluster-ip-range=10.254.0.0/16 \\
+  --enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,ResourceQuota,NodeRestriction \\
+  --authorization-mode=RBAC,Node \\
+  --kubelet-https=true \\
+  --enable-bootstrap-token-auth \\
+  --token-auth-file=/opt/kubernetes/cfg/token.csv \\
+  --service-node-port-range=30000-50000 \\
+  --tls-cert-file=/opt/kubernetes/ssl/kubernetes.pem \\
+  --tls-private-key-file=/opt/kubernetes/ssl/kubernetes-key.pem \\
+  --client-ca-file=/opt/kubernetes/ssl/ca.pem \\
+  --service-account-key-file=/opt/kubernetes/ssl/ca-key.pem \\
+  --kubelet-client-certificate=/opt/kubernetes/ssl/admin.pem \\
+  --kubelet-client-key=/opt/kubernetes/ssl/admin-key.pem \\
+  --etcd-cafile=/opt/kubernetes/ssl/ca.pem \\
+  --etcd-certfile=/opt/kubernetes/ssl/kubernetes.pem \\
+  --etcd-keyfile=/opt/kubernetes/ssl/kubernetes-key.pem
+[Install]
+WantedBy=multi-user.target
+EOF
+
+
+# 启动服务
+systemctl daemon-reload 
+systemctl restart kube-apiserver.service
+systemctl status kube-apiserver.service
+systemctl enable kube-apiserver.service
+
+
+
+
+
+

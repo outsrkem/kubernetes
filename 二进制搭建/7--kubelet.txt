@@ -1,0 +1,135 @@
+
+# 节点            IP                组件
+# k8s-master  10.10.10.10   etcd,kube-apiserver,kube-controller-manager,kube-scheduler,flannel,kubelet
+# k8s-node1   10.10.10.11   etcd,flannel,kubelet,kube-proxy,docker
+# k8s-node2   10.10.10.12   etcd,flannel,kubelet,kube-proxy,docker
+
+# 环境
+# 10.10.10.10 master etcd1
+# 10.10.10.11 node01 etcd2
+# 10.10.10.12 node02 etcd3
+
+# master
+cat << 'EOF' > /opt/kubernetes/cfg/kubelet.conf
+KUBELET_OPTS="--logtostderr=true \
+--v=4 \
+--address=10.10.10.10 \
+--hostname-override=10.10.10.10 \
+--kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
+--experimental-bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
+--config=/opt/kubernetes/cfg/kubelet.config \
+--cert-dir=/opt/kubernetes/ssl \
+--cluster-dns=10.254.0.10 \
+--node-labels=node-role.kubernetes.io/k8s-master=true \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0" 
+EOF
+cat << 'EOF' > /opt/kubernetes/cfg/kubelet.config
+kind: KubeletConfiguration 
+apiVersion: kubelet.config.k8s.io/v1beta1
+address: 10.10.10.10
+port: 10250
+cgroupDriver: cgroupfs
+clusterDNS: ["10.254.0.10"]
+clusterDomain: cluster.local.
+failSwapOn: false 
+authentication:
+  anonymous: 
+    enabled: true 
+EOF
+
+
+# node01
+cat << 'EOF' > /opt/kubernetes/cfg/kubelet.conf
+KUBELET_OPTS="--logtostderr=true \
+--v=4 \
+--address=10.10.10.11 \
+--hostname-override=10.10.10.11 \
+--kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
+--experimental-bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
+--config=/opt/kubernetes/cfg/kubelet.config \
+--cert-dir=/opt/kubernetes/ssl \
+--cluster-dns=10.254.0.10 \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0" 
+EOF
+
+cat << 'EOF' > /opt/kubernetes/cfg/kubelet.config
+kind: KubeletConfiguration 
+apiVersion: kubelet.config.k8s.io/v1beta1
+address: 10.10.10.11
+port: 10250
+cgroupDriver: cgroupfs
+clusterDNS: ["10.254.0.10"]
+clusterDomain: cluster.local.
+failSwapOn: false 
+authentication:
+  anonymous: 
+    enabled: true 
+EOF
+
+# node02
+cat << 'EOF' > /opt/kubernetes/cfg/kubelet.conf
+KUBELET_OPTS="--logtostderr=true \
+--v=4 \
+--address=10.10.10.12 \
+--hostname-override=10.10.10.12 \
+--kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
+--experimental-bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
+--config=/opt/kubernetes/cfg/kubelet.config \
+--cert-dir=/opt/kubernetes/ssl \
+--cluster-dns=10.254.0.10 \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0 \
+--feature-gates=AttachVolumeLimit=false" 
+EOF
+cat << 'EOF' > /opt/kubernetes/cfg/kubelet.config
+kind: KubeletConfiguration 
+apiVersion: kubelet.config.k8s.io/v1beta1
+address: 10.10.10.12
+port: 10250
+cgroupDriver: cgroupfs
+clusterDNS: ["10.254.0.10"]
+clusterDomain: cluster.local.
+failSwapOn: false 
+authentication:
+  anonymous: 
+    enabled: true 
+EOF
+
+
+
+
+
+cat << 'EOF' > /usr/lib/systemd/system/kubelet.service
+[Unit]
+Description=Kubernetes Kubelet 
+After=docker.service 
+Requires=docker.service 
+[Service]
+EnvironmentFile=/opt/kubernetes/cfg/kubelet.conf 
+ExecStart=/opt/kubernetes/bin/kubelet $KUBELET_OPTS 
+Restart=on-failure KillMode=process 
+[Install]
+WantedBy=multi-user.target 
+EOF
+
+==========================================
+./kubelet --logtostderr=true \
+--v=4 \
+--address=10.10.10.12 \
+--hostname-override=10.10.10.12 \
+--fail-swap-on=false \
+--kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
+--experimental-bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
+--config=/opt/kubernetes/cfg/kubelet.config \
+--cert-dir=/opt/kubernetes/ssl \
+--cluster-dns=10.254.0.10 \
+--fail-swap-on=false \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0 \
+--feature-gates=AttachVolumeLimit=false
+
+==========================================
+
+systemctl daemon-reload 
+systemctl restart kubelet 
+systemctl status kubelet 
+systemctl enable kubelet 
+

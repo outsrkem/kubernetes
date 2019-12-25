@@ -1,0 +1,79 @@
+
+https://github.com/minminmsn/k8s1.13/blob/master/coredns/kubernetes1.13.1%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2coredns.md
+
+
+wget https://raw.githubusercontent.com/coredns/deployment/master/kubernetes/coredns.yaml.sed
+wget https://raw.githubusercontent.com/coredns/deployment/master/kubernetes/deploy.sh
+./deploy.sh -s -r 10.254.0.0/16 -i 10.254.0.10 -d cluster.local > coredns.yaml
+
+# 修改kubelet dns服务参数并重启kubelet服务
+cat << 'EOF' > /opt/kubernetes/cfg/kubelet.conf
+KUBELET_OPTS="--logtostderr=true \
+--v=4 \
+--address=10.10.10.10 \
+--hostname-override=10.10.10.10 \
+--kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
+--bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
+--config=/opt/kubernetes/cfg/kubelet.config \
+--cert-dir=/opt/kubernetes/ssl \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0 \
+--cluster-dns=10.254.0.10 \
+--cluster-domain=cluster.local. \
+--resolv-conf=/etc/resolv.conf \
+--node-labels=node-role.kubernetes.io/k8s-master=true"
+EOF
+
+cat << 'EOF' > /opt/kubernetes/cfg/kubelet.conf
+KUBELET_OPTS="--logtostderr=true \
+--v=4 \
+--address=10.10.10.11 \
+--hostname-override=10.10.10.11 \
+--kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
+--bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
+--config=/opt/kubernetes/cfg/kubelet.config \
+--cert-dir=/opt/kubernetes/ssl \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0 \
+--cluster-dns=10.254.0.10 \
+--cluster-domain=cluster.local. \
+--resolv-conf=/etc/resolv.conf \
+--node-labels=node-role.kubernetes.io/k8s-master=true"
+EOF
+
+
+cat << 'EOF' > /opt/kubernetes/cfg/kubelet.conf
+KUBELET_OPTS="--logtostderr=true \
+--v=4 \
+--address=10.10.10.12 \
+--hostname-override=10.10.10.12 \
+--kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
+--bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
+--config=/opt/kubernetes/cfg/kubelet.config \
+--cert-dir=/opt/kubernetes/ssl \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0 \
+--cluster-dns=10.254.0.10 \
+--cluster-domain=cluster.local. \
+--resolv-conf=/etc/resolv.conf \
+--node-labels=node-role.kubernetes.io/k8s-master=true"
+EOF
+
+systemctl daemon-reload 
+systemctl restart kubelet 
+systemctl status kubelet 
+
+
+# 注意：拿SVC服务来测试
+kubectl run -it --rm --restart=Never --image=infoblox/dnstools:latest dnstools
+If you don't see a command prompt, try pressing enter.
+dnstools# nslookup kubernetes
+Server:     10.254.0.10
+Address:    10.254.0.10#53
+
+Name:   kubernetes.default.svc.cluster.local
+Address: 10.254.0.1
+
+dnstools# nslookup nginx
+Server:     10.254.0.10
+Address:    10.254.0.10#53
+
+Name:   nginx.default.svc.cluster.local
+Address: 10.254.224.237

@@ -1,0 +1,72 @@
+
+# 节点            IP                组件
+# k8s-master  10.10.10.10   etcd,kube-apiserver,kube-controller-manager,kube-scheduler,kubelet,flannel
+# k8s-node1   10.10.10.11   etcd,kubelet,flannel,kube-proxy,docker
+# k8s-node2   10.10.10.12   etcd,kubelet,flannel,kube-proxy,docker
+
+# 环境
+# 10.10.10.10 master etcd1
+# 10.10.10.11 node01 etcd2
+# 10.10.10.12 node02 etcd3
+
+
+# master
+
+cat << 'EOF' > /opt/kubernetes/cfg/kube-proxy.conf
+KUBE_PROXY_OPTS="--logtostderr=true \
+--v=4 \
+--hostname-override=10.10.10.10 \
+--cluster-cidr=10.254.0.0/16 \
+--proxy-mode=ipvs \
+--kubeconfig=/opt/kubernetes/cfg/kube-proxy.kubeconfig" 
+EOF
+
+# node01
+
+cat << 'EOF' > /opt/kubernetes/cfg/kube-proxy.conf
+KUBE_PROXY_OPTS="--logtostderr=true \
+--v=4 \
+--hostname-override=10.10.10.11 \
+--cluster-cidr=10.254.0.0/16 \
+--proxy-mode=ipvs \
+--kubeconfig=/opt/kubernetes/cfg/kube-proxy.kubeconfig" 
+EOF
+
+# node02
+
+
+cat << 'EOF' > /opt/kubernetes/cfg/kube-proxy.conf
+KUBE_PROXY_OPTS="--logtostderr=true \
+--v=4 \
+--hostname-override=10.10.10.12 \
+--cluster-cidr=10.254.0.0/16 \
+--proxy-mode=ipvs \
+--kubeconfig=/opt/kubernetes/cfg/kube-proxy.kubeconfig" 
+EOF
+
+
+
+###三台都执行
+
+cat << 'EOF' > /usr/lib/systemd/system/kube-proxy.service
+[Unit] 
+Description=Kubernetes Proxy
+After=network.target 
+[Service]
+EnvironmentFile=-/opt/kubernetes/cfg/kube-proxy.conf 
+ExecStart=/opt/kubernetes/bin/kube-proxy $KUBE_PROXY_OPTS 
+Restart=on-failure
+[Install] 
+WantedBy=multi-user.target
+EOF
+----------------
+/opt/kubernetes/bin/kube-proxy
+
+
+systemctl daemon-reload 
+systemctl enable kube-proxy 
+systemctl restart kube-proxy 
+systemctl status kube-proxy
+
+
+
