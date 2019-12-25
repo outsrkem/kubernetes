@@ -13,6 +13,7 @@
 #       - admin-key.pem
 #
 #
+#
 # 安装 CFSSL 直接使用二进制源码包安装
 if ! which cfssl ; then
     wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 -O /usr/local/bin/cfssl
