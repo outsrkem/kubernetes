@@ -19,8 +19,14 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── pod-configmap-3.yaml
 │   ├── pod-configmap.yaml
 │   └── pod-secret-1.yaml
+├── coredns
+│   ├── coredns.yaml.sed
+│   ├── deploy.sh
+│   └── kubernetes1.13.1\351\233\206\347\276\244\351\203\250\347\275\262coredns.md
 ├── dashboard
+│   ├── dashboard-adminuser-k8sv1.13.yaml
 │   ├── dashboard-admin.yaml
+│   ├── kubernetes-dashboard-k8sv1.13.yaml
 │   ├── namespace-dashboard.yaml
 │   └── recommended.yaml
 ├── deploy-myapp.yaml
@@ -83,18 +89,34 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── deploy-myapp.yaml
 │   ├── required-Affinity-demo-pod.yaml
 │   └── required-anti-Affinity-demo-pod.yaml
+├── secret
+│   ├── deploy-myapp.yaml
+│   └── secret.yaml
 ├── stateful
 │   ├── pv-demo.yaml
 │   └── stateful-demo.yaml
 ├── upDataGit.sh
-└── volumes
-    ├── deploy-vol-pvc.yaml
-    ├── pod-vol-demo.yaml
-    ├── pod-vol-hostpath.yaml
-    ├── pod-vol-html-demo.yaml
-    ├── pod-vol-nfs.yaml
-    ├── pod-vol-pvc.yaml
-    └── pv-demo.yaml
+├── volumes
+│   ├── deploy-vol-pvc.yaml
+│   ├── pod-vol-demo.yaml
+│   ├── pod-vol-hostpath.yaml
+│   ├── pod-vol-html-demo.yaml
+│   ├── pod-vol-nfs.yaml
+│   ├── pod-vol-pvc.yaml
+│   └── pv-demo.yaml
+└── \344\272\214\350\277\233\345\210\266\346\220\255\345\273\272
+    ├── 10--\351\203\250\347\275\262coredns.txt
+    ├── 1--kube-etcd.txt
+    ├── 2--kube-apiserver.txt
+    ├── 3--kube-controller-manager.txt
+    ├── 4--kube-scheduler.txt
+    ├── 5--\350\256\244\350\257\201\345\222\214\346\216\210\346\235\203.txt
+    ├── 6--flannel.txt
+    ├── 7--kubelet.txt
+    ├── 8--kube-proxy.txt
+    ├── 9--\346\267\273\345\212\240\351\233\206\347\276\244\350\212\202\347\202\271.txt
+    ├── create-ca.sh
+    └── dashboard.txt
 
-11 directories, 75 files
+14 directories, 94 files
 ```
