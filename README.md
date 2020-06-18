@@ -90,7 +90,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── required-Affinity-demo-pod.yaml
 │   └── required-anti-Affinity-demo-pod.yaml
 ├── secret
-│   └── deploy-myapp.yaml
+│   └── deploy-myapp-secret.yaml
 ├── stateful
 │   ├── pv-demo.yaml
 │   └── stateful-demo.yaml
