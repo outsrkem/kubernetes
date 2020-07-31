@@ -15,7 +15,7 @@ kubernetes 资源清单文件
 https://blog.csdn.net/lvdepeng123/article/details/79215882
 
 \`\`\`
-`tree`
+`tree -N`
 \`\`\`
 EOF
 

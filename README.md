@@ -22,7 +22,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── coredns
 │   ├── coredns.yaml.sed
 │   ├── deploy.sh
-│   └── kubernetes1.13.1\351\233\206\347\276\244\351\203\250\347\275\262coredns.md
+│   └── kubernetes1.13.1集群部署coredns.md
 ├── dashboard
 │   ├── dashboard-adminuser-k8sv1.13.yaml
 │   ├── dashboard-admin.yaml
@@ -103,17 +103,17 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── pod-vol-nfs.yaml
 │   ├── pod-vol-pvc.yaml
 │   └── pv-demo.yaml
-└── \344\272\214\350\277\233\345\210\266\346\220\255\345\273\272
-    ├── 10--\351\203\250\347\275\262coredns.txt
+└── 二进制搭建
+    ├── 10--部署coredns.txt
     ├── 1--kube-etcd.txt
     ├── 2--kube-apiserver.txt
     ├── 3--kube-controller-manager.txt
     ├── 4--kube-scheduler.txt
-    ├── 5--\350\256\244\350\257\201\345\222\214\346\216\210\346\235\203.txt
+    ├── 5--认证和授权.txt
     ├── 6--flannel.txt
     ├── 7--kubelet.txt
     ├── 8--kube-proxy.txt
-    ├── 9--\346\267\273\345\212\240\351\233\206\347\276\244\350\212\202\347\202\271.txt
+    ├── 9--添加集群节点.txt
     ├── create-ca.sh
     └── dashboard.txt
 
