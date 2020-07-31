@@ -11,11 +11,11 @@ spec:
     ports:
     - name: http
       containerPort: 80
-    volumeMounts:
+    volumeMounts:     # 将宿主机的共享文件或者目录挂载至容器位置
     - name: html
       mountPath: /usr/share/nginx/html/
-  volumes:
-  - name: html
+  volumes:            # 创建存储卷
+  - name: html        # 存储卷名字，必须定义
     hostPath:
       path: /data/pod/volumel
-      type: DirectoryOrCreate
+      type: DirectoryOrCreate    # 挂载类型为目录不存在则自动创建

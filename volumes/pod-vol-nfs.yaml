@@ -13,9 +13,10 @@ spec:
       containerPort: 80
     volumeMounts:
     - name: html
-      mountPath: /usr/share/nginx/html/
+      mountPath: /usr/share/nginx/html/   # pod中挂载的路径
   volumes:
   - name: html
     nfs:
-      path: /data/volumes
-      server: nfs.k8s.com
+      path: /data/volumes   # nfs 服务端共享的目录
+      server: nfs.k8s.com   # 使用域名的方式，在节点添加hosts文件映射到nfs服务端ip即可
+
