@@ -37,7 +37,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── heapster-rbac.yaml
 │   ├── heapster.yaml
 │   └── influxdb.yaml
-├── ingress-nginx
+├── ingress
 │   ├── deploy-demo.yaml
 │   ├── ingress-myapp.yaml
 │   ├── ingress-tomcat-tls.yaml
