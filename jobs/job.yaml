@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-demo
+  namespace: default
+spec:
+  template:
+    metadata:
+      name: job-demo
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: counter
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command:
+        - "bin/sh"
+        - "-c"
+        - "mkdir -p /var/log/jobs/ && while true ;do  echo `date` >> /var/log/jobs/jobs.log ; sleep 1 ;done"
+        volumeMounts:               # 将宿主机的共享文件或者目录挂载至容器位置
+        - name: vol-job-demo-1596245190
+          mountPath: /var/log/jobs/
+      volumes:                        # 创建存储卷
+      - name: vol-job-demo-1596245190 # 存储卷名字，必须定义
+        hostPath:
+          path: /data/pod/volumel/jobs
+          type: DirectoryOrCreate     # 挂载类型为目录不存在则自动创建
+
+

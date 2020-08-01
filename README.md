@@ -45,6 +45,8 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── tls.crt
 │   ├── tls.key
 │   └── tomcat-demo.yaml
+├── jobs
+│   └── job.yaml
 ├── liveness-exec.yaml
 ├── liveness-http.yaml
 ├── master
@@ -117,5 +119,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── create-ca.sh
     └── dashboard.txt
 
-14 directories, 93 files
+15 directories, 94 files
 ```
