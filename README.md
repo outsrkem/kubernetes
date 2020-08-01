@@ -37,11 +37,12 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── heapster-rbac.yaml
 │   ├── heapster.yaml
 │   └── influxdb.yaml
-├── ingress
+├── ingress-nginx
 │   ├── deploy-demo.yaml
 │   ├── ingress-myapp.yaml
 │   ├── ingress-tomcat-tls.yaml
 │   ├── ingress-tomcat.yaml
+│   ├── service-nodeport.yaml
 │   ├── tls.crt
 │   ├── tls.key
 │   └── tomcat-demo.yaml
@@ -120,5 +121,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── create-ca.sh
     └── dashboard.txt
 
-15 directories, 95 files
+15 directories, 96 files
 ```
