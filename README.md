@@ -45,6 +45,18 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── tls.crt
 │   ├── tls.key
 │   └── tomcat-demo.yaml
+├── ingress-nginx
+│   ├── configmap.yaml
+│   ├── deploy-demo.yaml
+│   ├── ingress-myapp.yaml
+│   ├── mandatory.yaml
+│   ├── namespace.yaml
+│   ├── rbac.yaml
+│   ├── service-nodeport.yaml
+│   ├── tomcat-demo.yaml
+│   ├── upDataGit.sh
+│   ├── vim
+│   └── with-rbac.yaml
 ├── jobs
 │   ├── job-demo.yaml
 │   └── pi-demo.yaml
@@ -120,5 +132,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── create-ca.sh
     └── dashboard.txt
 
-15 directories, 95 files
+16 directories, 106 files
 ```
