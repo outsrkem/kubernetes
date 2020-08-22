@@ -1,0 +1,9 @@
+--- coredns.yaml	2020-08-22 16:39:34.555058930 +0800
+@@ -81,6 +81,7 @@
+   # replicas: not specified here:
+   # 1. Default is 1.
+   # 2. Will be tuned in real time if DNS horizontal auto-scaling is turned on.
++  replicas: 1
+   strategy:
+     type: RollingUpdate
+     rollingUpdate:
