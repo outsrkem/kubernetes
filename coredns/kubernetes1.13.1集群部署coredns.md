@@ -48,6 +48,11 @@ coredns.yaml    coredns.yaml.sed  deploy.sh
 ---
 >   clusterIP: CLUSTER_DNS_IP
 ```
+#### 打补丁
+
+```
+patch -p0 < test.patch
+```
 
 
 ### 二、部署coredns
