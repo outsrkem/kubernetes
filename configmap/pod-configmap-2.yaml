@@ -16,10 +16,11 @@ spec:
     - name: http
       containerPort: 80
     volumeMounts:
-    - name: nginxconf
-      mountPath: /etc/nginx/config.d/
+    - name: vol-nginx-config-1599049975370790115
+      # 会覆盖/etc/nginx/conf.d 目录下原有的文件
+      mountPath: /etc/nginx/conf.d
       readOnly: true
   volumes:
-  - name: nginxconf
+  - name: vol-nginx-config-1599049975370790115
     configMap:
       name: nginx-config
