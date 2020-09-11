@@ -18,6 +18,6 @@ spec:
 
 ---
 # sessionAffinity: ClientIP  # 定义sessionAffinity ，此时注释掉，下面是用补丁方式
-# # kubectl patch svc myapp -p '{"spec":{"sessionAffinity":"None"}}'
-# # kubectl patch svc myapp -p '{"spec":{"externalTrafficPolicy":"Local"}}'
-# # nodePor 只有type: NodePort 时 才 能 生 效
+# kubectl patch svc myapp -p '{"spec":{"sessionAffinity":"None"}}'
+# kubectl patch svc myapp -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+# nodePor 只有type: NodePort 时 才 能 生 效
