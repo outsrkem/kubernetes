@@ -17,8 +17,18 @@ spec:
       containers:
       - name: redis
         image: registry.cn-shanghai.aliyuncs.com/outsrkem/nginx:1.15.2-tools
+        imagePullPolicy: IfNotPresent
+        resources: #资源管理
+          requests: #容器运行时，最低资源需求
+            cpu: 0.1 # #CPU资源（核数），两种方式，浮点数或者是整数+m，0.1=100m，最少值为0.001核（1m）
+            memory: 32Mi
+          limits: #资源限制
+            cpu: 0.5
+            memory: 50Mi
         ports:
         - containerPort: 80       # containerPort是pod内部容器的端口，targetPort映射到containerPort。
+          name: httpd
+          protocol: TCP
         readinessProbe: # 就绪性探针
           tcpSocket:
             port: 80
@@ -35,6 +45,14 @@ spec:
           failureThreshold: 3
           timeoutSeconds: 1
           successThreshold: 1
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 10.96.0.10
+        searches:
+          - nginx.svc.cluster.local
+        options:
+          - name: single-request-reopen          
 ---
 apiVersion: v1
 kind: Service
@@ -44,8 +62,6 @@ metadata:
 spec:
   selector:
     app: liveness-tcp-nginx
-  type: NodePort
   ports:
   - port: 80
     targetPort: 80
-    nodePort: 30080
