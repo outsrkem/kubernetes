@@ -50,8 +50,10 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── jobs
 │   ├── job-demo.yaml
 │   └── pi-demo.yaml
-├── liveness-exec.yaml
-├── liveness-http.yaml
+├── liveness
+│   ├── liveness-exec.yaml
+│   ├── liveness-http.yaml
+│   └── liveness-tcp.yaml
 ├── master
 │   ├── aggregated-metrics-reader.yaml
 │   ├── auth-delegator.yaml
@@ -122,5 +124,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── create-ca.sh
     └── dashboard.txt
 
-15 directories, 97 files
+16 directories, 98 files
 ```
