@@ -7,10 +7,17 @@ spec:
   selector:
     app: myapp
     release: canary
-  clusterIP: 10.99.99.99 # 自己定义的ip 不能冲突
+  externalTrafficPolicy: Cluster
+  sessionAffinity: None
   type: NodePort
-# sessionAffinity: ClientIP  # 定义sessionAffinity ，此时注释掉，下面是用补丁方式
   ports:
-  - port: 80
+  - protocol: TCP
+    port: 80
     targetPort: 80
-    nodePort: 30080 # 只有type: NodePort 时 才 能 生 效
+    nodePort: 30080
+
+---
+# sessionAffinity: ClientIP  # 定义sessionAffinity ，此时注释掉，下面是用补丁方式
+# # kubectl patch svc myapp -p '{"spec":{"sessionAffinity":"None"}}'
+# # kubectl patch svc myapp -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+# # nodePor 只有type: NodePort 时 才 能 生 效

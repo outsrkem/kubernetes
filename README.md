@@ -20,6 +20,7 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── pod-configmap.yaml
 │   └── pod-secret-1.yaml
 ├── coredns
+│   ├── coredns.yaml.patch
 │   ├── coredns.yaml.sed
 │   ├── deploy.sh
 │   └── kubernetes1.13.1集群部署coredns.md
@@ -121,5 +122,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── create-ca.sh
     └── dashboard.txt
 
-15 directories, 96 files
+15 directories, 97 files
 ```
