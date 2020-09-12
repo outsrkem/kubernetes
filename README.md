@@ -33,6 +33,10 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── deploy-myapp.yaml
 ├── deploy-sa-myapp.yaml
 ├── deploy-zkweb.yaml
+├── flannel
+│   ├── kube-flannel.patch
+│   ├── kube-flannel.yml
+│   └── README.md
 ├── heapster
 │   ├── grafana.yaml
 │   ├── heapster-rbac.yaml
@@ -124,5 +128,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── create-ca.sh
     └── dashboard.txt
 
-16 directories, 98 files
+17 directories, 101 files
 ```
