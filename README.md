@@ -67,6 +67,19 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── metrics-server-service.yaml
 │   └── resource-reader.yaml
 ├── metrics-server
+│   ├── 1.8+
+│   │   ├── aggregated-metrics-reader.yaml
+│   │   ├── auth-delegator.patch
+│   │   ├── auth-delegator.yaml
+│   │   ├── auth-reader.patch
+│   │   ├── auth-reader.yaml
+│   │   ├── metrics-apiservice.patch
+│   │   ├── metrics-apiservice.yaml
+│   │   ├── metrics-server-deployment.patch
+│   │   ├── metrics-server-deployment.yaml
+│   │   ├── metrics-server-service.yaml
+│   │   ├── README.md
+│   │   └── resource-reader.yaml
 │   ├── aggregated-metrics-reader.yaml
 │   ├── auth-delegator.yaml
 │   ├── auth-reader.yaml
@@ -128,5 +141,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── create-ca.sh
     └── dashboard.txt
 
-17 directories, 101 files
+18 directories, 113 files
 ```

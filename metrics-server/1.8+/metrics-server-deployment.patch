@@ -1,0 +1,17 @@
+--- metrics-server-deployment.yaml	2019-10-14 20:42:09.000000000 +0800
++++ ../../../metrics-server-0.3.6/deploy/1.8+/metrics-server-deployment.yaml	2020-09-12 20:15:20.215980117 +0800
+@@ -29,8 +29,12 @@
+         emptyDir: {}
+       containers:
+       - name: metrics-server
+-        image: k8s.gcr.io/metrics-server-amd64:v0.3.6
+-        imagePullPolicy: Always
++        image: mirrorgooglecontainers/metrics-server-amd64:v0.3.6
++        imagePullPolicy: IfNotPresent
++        command:
++          - /metrics-server
++          - --kubelet-preferred-address-types=InternalIP
++          - --kubelet-insecure-tls
+         volumeMounts:
+         - name: tmp-dir
+           mountPath: /tmp

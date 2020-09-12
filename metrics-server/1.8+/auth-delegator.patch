@@ -1,0 +1,9 @@
+--- auth-delegator.yaml	2019-10-14 20:42:09.000000000 +0800
++++ ../../../metrics-server-0.3.6/deploy/1.8+/auth-delegator.yaml	2020-09-12 20:19:35.863856237 +0800
+@@ -1,5 +1,5 @@
+ ---
+-apiVersion: rbac.authorization.k8s.io/v1beta1
++apiVersion: rbac.authorization.k8s.io/v1
+ kind: ClusterRoleBinding
+ metadata:
+   name: metrics-server:system:auth-delegator

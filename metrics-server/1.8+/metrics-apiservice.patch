@@ -1,0 +1,9 @@
+--- metrics-apiservice.yaml	2019-10-14 20:42:09.000000000 +0800
++++ ../../../metrics-server-0.3.6/deploy/1.8+/metrics-apiservice.yaml	2020-09-12 20:20:14.018688501 +0800
+@@ -1,5 +1,5 @@
+ ---
+-apiVersion: apiregistration.k8s.io/v1beta1
++apiVersion: apiregistration.k8s.io/v1
+ kind: APIService
+ metadata:
+   name: v1beta1.metrics.k8s.io
