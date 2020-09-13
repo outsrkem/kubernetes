@@ -25,11 +25,16 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 │   ├── deploy.sh
 │   └── kubernetes1.13.1集群部署coredns.md
 ├── dashboard
+│   ├── 1.16
+│   │   ├── ca.pem
+│   │   ├── dashboard-admin.yaml
+│   │   ├── dashboard.crt
+│   │   ├── dashboard.key
+│   │   ├── namespace-dashboard.yaml
+│   │   ├── recommended.yaml
+│   │   └── start-dashboard.sh
 │   ├── dashboard-adminuser-k8sv1.13.yaml
-│   ├── dashboard-admin.yaml
-│   ├── kubernetes-dashboard-k8sv1.13.yaml
-│   ├── namespace-dashboard.yaml
-│   └── recommended.yaml
+│   └── kubernetes-dashboard-k8sv1.13.yaml
 ├── deploy-myapp.yaml
 ├── deploy-sa-myapp.yaml
 ├── deploy-zkweb.yaml
@@ -119,5 +124,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── create-ca.sh
     └── dashboard.txt
 
-16 directories, 93 files
+17 directories, 97 files
 ```
