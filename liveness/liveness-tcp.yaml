@@ -4,7 +4,7 @@ metadata:
   name: liveness-tcp-nginx
   namespace: default
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: liveness-tcp-nginx
@@ -20,11 +20,11 @@ spec:
         imagePullPolicy: IfNotPresent
         resources: #资源管理
           requests: #容器运行时，最低资源需求
-            cpu: 0.1 # #CPU资源（核数），两种方式，浮点数或者是整数+m，0.1=100m，最少值为0.001核（1m）
-            memory: 32Mi
+            cpu: 100m # #CPU资源（核数），两种方式，浮点数或者是整数+m，0.1=100m，最少值为0.001核（1m）
+            memory: 10Mi
           limits: #资源限制
-            cpu: 0.5
-            memory: 50Mi
+            cpu: 200m
+            memory: 20Mi
         ports:
         - containerPort: 80       # containerPort是pod内部容器的端口，targetPort映射到containerPort。
           name: httpd
