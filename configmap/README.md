@@ -1,6 +1,6 @@
 ## configMap  资源
 
-<p style="text-indent:2em">多生产环境中的应用程序配置较为复杂，可能需要多个 config 文件、命令行参数和环境变量的组合。使用容器部署
+&emsp;&emsp;<p style="text-indent:2em">多生产环境中的应用程序配置较为复杂，可能需要多个 config 文件、命令行参数和环境变量的组合。使用容器部署
 时，把配置应该从应用程序镜像中解耦出来，以保证镜像的可移植性。尽管 Secret 允许类似于验证信息和秘钥等信息从应用
 中解耦出来，但在 K8S1.2 前并没有为了普通的或者非 secret 配置而存在的对象。在 K8S1.2 后引入 ConfigMap 来处理这
     种类型的配置数据。自 1.14 kubectl 开始支持 kustomization.yaml。</p>
