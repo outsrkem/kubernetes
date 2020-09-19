@@ -387,7 +387,7 @@ Kubernetes 的 Worker 节点跟 Master 节点几乎是相同的，它们运行�
 ```
 # 执行以下命令将节点接入集群
 kubeadm join 10.10.10.31:6443 --token 67kq55.8hxoga556caxty7s \
---discovery-token-ca-cert-hash ha256:7d50e704bbfe69661e37c5f3ad13b1b88032b6b2b703ebd4899e259477b5be69
+    --discovery-token-ca-cert-hash ha256:7d50e704bbfe69661e37c5f3ad13b1b88032b6b2b703ebd4899e259477b5be69
 
 # 如果执行kubeadm init时没有记录下加入集群的命令，可以通过以下命令重新创建
 kubeadm token create --print-join-command
@@ -395,7 +395,8 @@ kubeadm token create --print-join-command
 
 在k8s-node1上执行kubeadm join ：
 ```
-[root@k8s-node1 ~]# kubeadm join 10.10.10.31:6443 --token 67kq55.8hxoga556caxty7s --discovery-token-ca-cert-hash sha256:7d50e704bbfe69661e37c5f3ad13b1b88032b6b2b703ebd4899e259477b5be69
+[root@k8s-node1 ~]# kubeadm join 10.10.10.31:6443 --token 67kq55.8hxoga556caxty7s \
+    --discovery-token-ca-cert-hash sha256:7d50e704bbfe69661e37c5f3ad13b1b88032b6b2b703ebd4899e259477b5be69
 [preflight] Running pre-flight checks
 ......
 This node has joined the cluster:
