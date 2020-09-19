@@ -20,6 +20,7 @@ sed -ri '/^[^#]*swap/s@^@#@' /etc/fstab
 ```
 ### 配置时间同步
 centos7 默认已启用 chrony  服务，执行 chronyc sources 命令，查看存在以*开头的行，说明已经与NTP服务器时间同步.
+
 配置时间源。
 
 `vim /etc/chrony.conf`
