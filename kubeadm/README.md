@@ -11,12 +11,12 @@
 ```
 # 关闭防火墙和 selinux
 systemctl stop firewalld && systemctl disable firewalld
-sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config && setenforce 0
+sed -ri '/^[^#]*SELINUX=/s#=.+$#=disabled#' /etc/selinux/config && setenforce 0
 
 # 关闭 swap (k8s默认不使用 swap，可以指定参数使用 swap)
 swapoff -a
 yes | cp /etc/fstab /etc/fstab_bak
-cat /etc/fstab_bak |grep -v swap > /etc/fstab
+sed -ri '/^[^#]*swap/s@^@#@' /etc/fstab
 ```
 ### 配置时间同步
 centos7 默认已启用 chrony  服务，执行 chronyc sources 命令，查看存在以*开头的行，说明已经与NTP服务器时间同步.
@@ -336,12 +336,12 @@ Events:
 ```
 [centos@k8s-master ~]# kubectl -n kube-system get pod -o wide    
 NAME                                 READY   STATUS    RESTARTS  ......
-coredns-78d4cf999f-7jdx7             0/1     Pending   0         
-coredns-78d4cf999f-s6mhk             0/1     Pending   0         
-etcd-k8s-master                      1/1     Running   0         
-kube-apiserver-k8s-master            1/1     Running   0         
-kube-controller-manager-k8s-master   1/1     Running   0         
-kube-proxy-przwf                     1/1     Running   0         
+coredns-78d4cf999f-7jdx7             0/1     Pending   0
+coredns-78d4cf999f-s6mhk             0/1     Pending   0
+etcd-k8s-master                      1/1     Running   0
+kube-apiserver-k8s-master            1/1     Running   0
+kube-controller-manager-k8s-master   1/1     Running   0
+kube-proxy-przwf                     1/1     Running   0
 kube-scheduler-k8s-master            1/1     Running   0
 ```
 可以看到，CoreDNS依赖于网络的 Pod 都处于 Pending 状态，即调度失败。这当然是符合预期的：因为这个 Master 节点的网络尚未就绪。
@@ -385,10 +385,11 @@ Kubernetes 的 Worker 节点跟 Master 节点几乎是相同的，它们运行�
 在 k8s-node1 和 k8s-node2 上分别执行如下命令，将其注册到 Cluster 中：
 
 ```
-#执行以下命令将节点接入集群
-kubeadm join 10.10.10.31:6443 --token 67kq55.8hxoga556caxty7s --discovery-token-ca-cert-hash sha256:7d50e704bbfe69661e37c5f3ad13b1b88032b6b2b703ebd4899e259477b5be69
+# 执行以下命令将节点接入集群
+kubeadm join 10.10.10.31:6443 --token 67kq55.8hxoga556caxty7s \
+--discovery-token-ca-cert-hash ha256:7d50e704bbfe69661e37c5f3ad13b1b88032b6b2b703ebd4899e259477b5be69
 
-#如果执行kubeadm init时没有记录下加入集群的命令，可以通过以下命令重新创建
+# 如果执行kubeadm init时没有记录下加入集群的命令，可以通过以下命令重新创建
 kubeadm token create --print-join-command
 ```
 
@@ -425,18 +426,18 @@ nodes状态全部为ready，由于每个节点都需要启动若干组件，如�
 
 ```
 [centos@k8s-master ~]# kubectl get pod --all-namespaces -o wide
-NAMESPACE     NAME                                 READY   STATUS    ...
-kube-system   coredns-78d4cf999f-7jdx7             1/1     Running  
-kube-system   coredns-78d4cf999f-s6mhk             1/1     Running  
-kube-system   etcd-k8s-master                      1/1     Running  
-kube-system   kube-apiserver-k8s-master            1/1     Running  
-kube-system   kube-controller-manager-k8s-master   1/1     Running  
-kube-system   kube-flannel-ds-amd64-d2r8p          1/1     Running  
-kube-system   kube-flannel-ds-amd64-d85c6          1/1     Running  
-kube-system   kube-flannel-ds-amd64-lkf2f          1/1     Running  
-kube-system   kube-proxy-k8jx8                     1/1     Running  
-kube-system   kube-proxy-n95ck                     1/1     Running  
-kube-system   kube-proxy-przwf                     1/1     Running  
+NAMESPACE     NAME                                 READY   STATUS    ......
+kube-system   coredns-78d4cf999f-7jdx7             1/1     Running
+kube-system   coredns-78d4cf999f-s6mhk             1/1     Running
+kube-system   etcd-k8s-master                      1/1     Running
+kube-system   kube-apiserver-k8s-master            1/1     Running
+kube-system   kube-controller-manager-k8s-master   1/1     Running
+kube-system   kube-flannel-ds-amd64-d2r8p          1/1     Running
+kube-system   kube-flannel-ds-amd64-d85c6          1/1     Running
+kube-system   kube-flannel-ds-amd64-lkf2f          1/1     Running
+kube-system   kube-proxy-k8jx8                     1/1     Running
+kube-system   kube-proxy-n95ck                     1/1     Running
+kube-system   kube-proxy-przwf                     1/1     Running
 kube-system   kube-scheduler-k8s-master            1/1     Running
 ```
 
@@ -459,9 +460,9 @@ deployment.extensions/nginx scaled
 
 ```
 [centos@k8s-master ~]# kubectl get pods -l app=nginx -o wide
-NAME                     READY   STATUS    RESTARTS   AGE  ...
-nginx-54458cd494-p2qgx   1/1     Running   0          111s 
-nginx-54458cd494-sdlm7   1/1     Running   0          103s 
+NAME                     READY   STATUS    RESTARTS   AGE  ......
+nginx-54458cd494-p2qgx   1/1     Running   0          111s
+nginx-54458cd494-sdlm7   1/1     Running   0          103s
 ```
 再验证一下kube-proxy是否正常：
 
@@ -487,7 +488,9 @@ nginx   NodePort   10.108.17.2   <none>        80:30670/TCP   12s
 
 ### kube-proxy开启ipvs
 
-修改ConfigMap的kube-system/kube-proxy中的config.conf，mode: “ipvs”：
+修改ConfigMap的kube-system/kube-proxy中的config.conf，mode: “ipvs”。
+
+如果此前已经开启则无需操作，使用 `curl localhost:10249/proxyMode`命令可查看，如果要更换为iptables ，则在ConfigMap中修改：mode: "" 为空即可。
 
 ```
 [centos@k8s-master ~]# kubectl edit cm kube-proxy -n kube-system
