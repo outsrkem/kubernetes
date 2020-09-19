@@ -59,6 +59,8 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
 ├── jobs
 │   ├── job-demo.yaml
 │   └── pi-demo.yaml
+├── kubeadm
+│   └── README.md
 ├── liveness
 │   ├── liveness-exec.yaml
 │   ├── liveness-http.yaml
@@ -124,5 +126,5 @@ https://blog.csdn.net/lvdepeng123/article/details/79215882
     ├── create-ca.sh
     └── dashboard.txt
 
-17 directories, 97 files
+18 directories, 98 files
 ```
