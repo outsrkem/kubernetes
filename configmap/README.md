@@ -32,10 +32,10 @@ data:
 
 ```shell
     env: 
-    - name: NGINX_SERVER_PORT # 这是环境变量的名称
-      valueFrom: # kubectl explain pods.spec.containers.env.valueFrom.configMapKeyRef
+    - name: NGINX_SERVER_PORT  # 这是环境变量的名称
+      valueFrom:               # kubectl explain pods.spec.containers.env.valueFrom.configMapKeyRef
         configMapKeyRef:
-          name: nginx-config   # 只是configmap的资源名称
+          name: nginx-config   # 这是configmap的资源名称
           key: WEB.NGINX_PORT  # 这是configmap中的键，可以与环境变量不同，但建议使用相同的名称。
     - name: NGINX_SERVER_NAME
       valueFrom:
