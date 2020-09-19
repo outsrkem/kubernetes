@@ -20,6 +20,21 @@ sed -ri '/^[^#]*swap/s@^@#@' /etc/fstab
 ```
 ### 配置时间同步
 centos7 默认已启用 chrony  服务，执行 chronyc sources 命令，查看存在以*开头的行，说明已经与NTP服务器时间同步.
+配置时间源。
+
+`vim /etc/chrony.conf`
+```
+server cn.pool.ntp.org iburst
+server ntp.aliyun.com iburst 
+server ntp1.aliyun.com iburst
+server ntp2.aliyun.com iburst
+server ntp3.aliyun.com iburst
+server ntp4.aliyun.com iburst
+server ntp5.aliyun.com iburst
+server ntp6.aliyun.com iburst
+```
+
+重启服务
 
 ```
 systemctl restart chronyd.service
