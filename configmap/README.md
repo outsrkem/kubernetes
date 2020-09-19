@@ -1,9 +1,9 @@
 ## configMap  资源
 
-&emsp;&emsp;<p style="text-indent:2em">多生产环境中的应用程序配置较为复杂，可能需要多个 config 文件、命令行参数和环境变量的组合。使用容器部署
+多生产环境中的应用程序配置较为复杂，可能需要多个 config 文件、命令行参数和环境变量的组合。使用容器部署
 时，把配置应该从应用程序镜像中解耦出来，以保证镜像的可移植性。尽管 Secret 允许类似于验证信息和秘钥等信息从应用
 中解耦出来，但在 K8S1.2 前并没有为了普通的或者非 secret 配置而存在的对象。在 K8S1.2 后引入 ConfigMap 来处理这
-    种类型的配置数据。自 1.14 kubectl 开始支持 kustomization.yaml。</p>
+    种类型的配置数据。自 1.14 kubectl 开始支持 kustomization.yaml。
 
 ```shell
 kubectl create configmap nginx-config \
@@ -14,7 +14,7 @@ kubectl create configmap nginx-config \
 --from-literal=WEB.DB_USER_NAME=server
 ```
 
-<p style="text-indent:2em">查看该资源，看到此时 WEB.*** 均为键，后面均为值，这种创建方式更有利于使用env方式注入到pods里面。我们可看到get出来的yaml清单中的键是以字母顺序排序的。</p>
+查看该资源，看到此时 WEB.*** 均为键，后面均为值，这种创建方式更有利于使用env方式注入到pods里面。我们可看到get出来的yaml清单中的键是以字母顺序排序的。
 
 ```shell
 kubectl get configmaps nginx-config -o yaml # 简写为 kubectl get cm nginx-config -o yaml
@@ -28,7 +28,7 @@ data:
 ......
 ```
 
-<p style="text-indent:2em">使用如下方式通过env注入，但是这种注入方式，不会自动更新。需要重启pod才能被重新应用，所以这种方式更适合配置长期固定不变的配置项。</p>
+    使用如下方式通过env注入，但是这种注入方式，不会自动更新。需要重启pod才能被重新应用，所以这种方式更适合配置长期固定不变的配置项。
 
 ```shell
     env: 
