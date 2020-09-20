@@ -1,3 +1,7 @@
+## 一、系统初始化操作
+
+系统初始化操作是集群每个节点都要操作的步骤。
+
 ### 群集环境
 
 | IP          | 主机名     | 说明        |
@@ -6,7 +10,7 @@
 | 10.10.10.32 | k8s-node1  | node 节点   |
 | 10.10.10.33 | k8s-node2  | node 节点   |
 
-### 系统初始化操作
+### 关闭相关防护及swap
 
 ```
 # 关闭防火墙和 selinux
@@ -180,6 +184,10 @@ yum install -y kubelet-1.16.2 kubeadm-1.16.2 kubectl-1.16.2
 systemctl enable kubelet && systemctl start kubelet
 ```
 
+## 二、正式部署kubernetes
+
+以下操作是分节点操作步骤。
+
 ### 部署master节点
 
 #### 1、生成默认配置文件
@@ -221,7 +229,7 @@ bootstrapTokens:
   - authentication
 kind: InitConfiguration
 localAPIEndpoint:
-  advertiseAddress: 10.10.10.31 #修改为API Server的地址
+  advertiseAddress: 10.10.10.31 		# 修改为API Server的地址
   bindPort: 6443
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
@@ -241,15 +249,15 @@ dns:
 etcd:
   local:
     dataDir: /var/lib/etcd
-imageRepository: registry.aliyuncs.com/google_containers #修改为阿里云镜像仓库
+imageRepository: registry.aliyuncs.com/google_containers 	# 修改为阿里云镜像仓库
 kind: ClusterConfiguration
-kubernetesVersion: v1.16.2 # 当前版本
+kubernetesVersion: v1.16.2 			# 当前版本
 networking:
   dnsDomain: cluster.local
-  serviceSubnet: 10.96.0.0/12 #修改Service的网络
-  podSubnet: 10.244.0.0/16 #修改Pod的网络，这个不指定会导致flannel起不来
+  serviceSubnet: 10.96.0.0/12 		#	修改Service的网络，这里使用默认ip
+  podSubnet: 10.244.0.0/16 			# 修改Pod的网络，这个不指定会导致flannel起不来，这里使用默认ip
 scheduler: {}
-#下面增加的配置，用于设置Kube-proxy使用LVS
+# 下面增加的配置，用于设置Kube-proxy使用LVS
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
@@ -394,11 +402,31 @@ kube-scheduler-k8s-master            1/1     Running
 可以看到，所有的系统 Pod 都成功启动了，而刚刚部署的flannel网络插件则在 kube-system 下面新建了一个名叫kube-flannel-ds-amd64-lkf2f的 Pod，一般来说，这些 Pod 就是容器网络插件在每个节点上的控制组件。
 Kubernetes 支持容器网络插件，使用的是一个名叫 CNI 的通用接口，它也是当前容器网络的事实标准，市面上的所有容器网络开源项目都可以通过 CNI 接入 Kubernetes，比如 Flannel、Calico、Canal、Romana 等等，它们的部署方式也都是类似的“一键部署”。
 
-至此，Kubernetes 的 Master 节点就部署完成了。如果你只需要一个单节点的 Kubernetes，现在你就可以使用了。不过，在默认情况下，Kubernetes 的 Master 节点有污点 (taint) 存在是不能运行用户 Pod 的。
+至此，Kubernetes 的 Master 节点就部署完成了。如果只需要一个单节点的 Kubernetes，现在你就可以使用了。不过，在默认情况下，Kubernetes 的 Master 节点有污点 (taint) 存在是不能运行用户 Pod 的。可以通过以下步骤删除污点。而**NoSchedule**这个污点仅影响调度过程，对现存 Pod 无影响。
+
+Ⅰ、查看污点（Taints）
+
+```shell
+kubectl describe node k8s-master |grep Taints
+Taints:             node-role.kubernetes.io/master:NoSchedule
+```
+
+Ⅱ、删除这个污点
+
+```shell
+kubectl taint nodes k8s-master node-role.kubernetes.io/master=:NoSchedule-
+```
+
+Ⅲ、添加这样的污点
+
+```shell
+kubectl taint nodes k8s-master node-role.kubernetes.io/master=:NoSchedule
+```
 
 ### 部署node节点
-Kubernetes 的 Worker 节点跟 Master 节点几乎是相同的，它们运行着的都是一个 kubelet 组件。唯一的区别在于，在 kubeadm init 的过程中，kubelet 启动后，Master 节点上还会自动运行 kube-apiserver、kube-scheduler、kube-controller-manger 这三个系统 Pod。
-在 k8s-node1 和 k8s-node2 上分别执行如下命令，将其注册到 Cluster 中：
+
+Kubernetes 的工作节点与Master节点几乎是相同的，它们运行着的都是一个 kubelet 组件。唯一的区别在于，在 kubeadm init 的过程中，kubelet 启动后，Master 节点上还会自动运行 kube-apiserver、kube-scheduler、kube-controller-manger 这三个系统 Pod。
+在 k8s-node1 和 k8s-node2 上分别执行如下命令，将其注册到集群中：
 
 ```
 # 执行以下命令将节点接入集群

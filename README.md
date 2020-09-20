@@ -15,7 +15,8 @@ kubernetes 资源清单文件
 │   ├── pod-configmap-2.yaml
 │   ├── pod-configmap-3.yaml
 │   ├── pod-configmap.yaml
-│   └── pod-secret-1.yaml
+│   ├── pod-secret-1.yaml
+│   └── README.md
 ├── coredns
 │   ├── coredns.yaml.patch
 │   ├── coredns.yaml.sed
@@ -123,5 +124,5 @@ kubernetes 资源清单文件
     ├── create-ca.sh
     └── dashboard.txt
 
-18 directories, 98 files
+18 directories, 99 files
 ```
