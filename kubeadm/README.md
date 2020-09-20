@@ -254,7 +254,7 @@ kind: ClusterConfiguration
 kubernetesVersion: v1.16.2 			# 当前版本
 networking:
   dnsDomain: cluster.local
-  serviceSubnet: 10.96.0.0/12 		#	修改Service的网络，这里使用默认ip
+  serviceSubnet: 10.96.0.0/12 		# 修改Service的网络，这里使用默认ip
   podSubnet: 10.244.0.0/16 			# 修改Pod的网络，这个不指定会导致flannel起不来，这里使用默认ip
 scheduler: {}
 # 下面增加的配置，用于设置Kube-proxy使用LVS
