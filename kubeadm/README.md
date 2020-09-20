@@ -556,7 +556,7 @@ kube-proxy-m8zkx                        1/1     Running   0          52s
 查看日志：
 
 ```
-[centos@k8s-master ~]#kubectl -n kube-system  logs kube-proxy-dpx74
+[centos@k8s-master ~]# kubectl -n kube-system  logs kube-proxy-dpx74
 I1213 09:50:15.414493       1 server_others.go:189] Using ipvs Proxier.
 W1213 09:50:15.414908       1 proxier.go:365] IPVS scheduler not specified, use rr by default
 I1213 09:50:15.415021       1 server_others.go:216] Tearing down inactive rules.
