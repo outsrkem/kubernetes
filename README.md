@@ -36,10 +36,6 @@ kubernetes 资源清单文件
 ├── deploy-myapp.yaml
 ├── deploy-sa-myapp.yaml
 ├── deploy-zkweb.yaml
-├── flannel
-│   ├── kube-flannel.patch
-│   ├── kube-flannel.yml
-│   └── README.md
 ├── heapster
 │   ├── grafana.yaml
 │   ├── heapster-rbac.yaml
@@ -124,5 +120,5 @@ kubernetes 资源清单文件
     ├── create-ca.sh
     └── dashboard.txt
 
-18 directories, 99 files
+17 directories, 96 files
 ```
