@@ -24,13 +24,10 @@ kubernetes 资源清单文件
 │   └── kubernetes1.13.1集群部署coredns.md
 ├── dashboard
 │   ├── 1.16
-│   │   ├── ca.pem
 │   │   ├── dashboard-admin.yaml
-│   │   ├── dashboard.crt
-│   │   ├── dashboard.key
-│   │   ├── namespace-dashboard.yaml
-│   │   ├── recommended.yaml
-│   │   └── start-dashboard.sh
+│   │   ├── README.md
+│   │   ├── recommended.patch
+│   │   └── recommended.yaml
 │   ├── dashboard-adminuser-k8sv1.13.yaml
 │   └── kubernetes-dashboard-k8sv1.13.yaml
 ├── deploy-myapp.yaml
@@ -120,5 +117,5 @@ kubernetes 资源清单文件
     ├── create-ca.sh
     └── dashboard.txt
 
-17 directories, 96 files
+17 directories, 93 files
 ```
