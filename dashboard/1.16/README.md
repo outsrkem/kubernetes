@@ -58,9 +58,8 @@ $(kubectl -n kubernetes-dashboard get secret | grep dashboard-admin | awk '{prin
 https://节点ip:30008
 ```
 
-![](https://images.cnblogs.com/cnblogs_com/outsrkem/1571911/o_201007005302Snipaste_2020-10-07_08-52-37.png)
-
-![](https://images.cnblogs.com/cnblogs_com/outsrkem/1571911/o_201007005519Snipaste_2020-10-07_08-54-44.png)
+![](https://images.gitee.com/uploads/images/2020/1008/160810_c821b2ff_5330846.png "o_201007005302Snipaste_2020-10-07_08-52-37.png")
+![](https://images.gitee.com/uploads/images/2020/1008/160849_c2d6cdf3_5330846.png "o_201007005519Snipaste_2020-10-07_08-54-44.png")
 
 ### 使用 kubeconfig  文件 认证登录
 
