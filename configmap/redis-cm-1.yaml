@@ -1,0 +1,76 @@
+apiVersion: v1  
+kind: ConfigMap
+metadata:
+  name: logstash-config
+  namespace: default
+data:
+  02-beats-input.conf: |
+    input {
+      beats {
+        port => 5044
+      }
+    }
+  30-output.conf: |
+    output {
+      elasticsearch {  
+        hosts => ["127.0.0.1:9200"]
+        manage_template => false
+        index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+      }  
+    }  
+  10-syslog.conf: |
+    filter {
+      if [type] == "syslog" {
+        grok {
+          match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
+          add_field => [ "received_at", "%{@timestamp}" ]
+          add_field => [ "received_from", "%{host}" ]
+        }
+        syslog_pri { }
+        date {
+          match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+        }
+      }
+    }
+  11-nginx.conf: |
+    filter {
+      if [type] == "nginx-access" {
+        grok {
+          match => { "message" => "%{NGINXACCESS}" }
+        }
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-pod-cm-1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: registry.cn-shanghai.aliyuncs.com/outsrkem/redis:5.0.2
+        ports:
+        - name: http
+          containerPort: 6379
+          protocol: TCP
+        volumeMounts:
+        - name: vol-logstash-volume
+          mountPath: /usr/local/redis/conf/conf.d
+        securityContext:
+          runAsUser: 1200 # 配置进程用户
+      volumes:
+      - name: vol-logstash-volume
+        configMap:
+          name: logstash-config
+
+
