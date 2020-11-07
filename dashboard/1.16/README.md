@@ -33,6 +33,11 @@ openssl req -newkey rsa:2048 -nodes -sha256 -keyout ./dashboard.key -x509 -out .
 kubectl -n kubernetes-dashboard create secret generic kubernetes-dashboard-certs \
 --from-file=dashboard.key \
 --from-file=dashboard.crt
+# 或者
+# 保证键为dashboard.crt 和dashboard.key ,值为证书和私钥即可
+kubectl -n kubernetes-dashboard create secret generic kubernetes-dashboard-certs \
+--from-file=dashboard.crt=./dashboard.crt \
+--from-file=dashboard.key=./dashboard.key
 ```
 
 ### 5. 下载Dashboard 清单文件并创建应用
