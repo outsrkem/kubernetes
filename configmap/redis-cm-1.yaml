@@ -73,4 +73,22 @@ spec:
         configMap:
           name: logstash-config
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-pod-cm-1
+  namespace: default
+spec:
+  selector:
+    app: redis
+  externalTrafficPolicy: Cluster
+  sessionAffinity: None
+  type: NodePort
+  ports:
+  - port: 6379
+    protocol: TCP
+    targetPort: 6379
+    nodePort: 31379
+
 
