@@ -1,0 +1,75 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+bootstrapTokens:
+- groups:
+  - system:bootstrappers:kubeadm:default-node-token
+  token: abcdef.0123456789abcdef
+  ttl: 24h0m0s
+  usages:
+  - signing
+  - authentication
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: 10.10.10.31  # 本机ip
+  bindPort: 6443
+nodeRegistration:
+  criSocket: /var/run/dockershim.sock
+  name: k8s-master
+  taints:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/master
+---
+apiServer:
+  certSANs:  # 这里要写 所有主机名和ip以及虚拟ip
+  - 127.0.0.1
+  - 10.10.10.100
+  - 10.10.10.31
+  - 10.10.10.32
+  - 10.10.10.33
+  - "*.kubernetes.org"   # 这样写也可以，主机名为xx.kubernetes.org 即可
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta2
+certificatesDir: /etc/kubernetes/pki
+clusterName: kubernetes
+controlPlaneEndpoint: 10.10.10.100:8443  # 虚拟ip
+controllerManager: {}
+dns:
+  type: CoreDNS
+etcd:
+  external: # 外部etcd
+    endpoints:
+    - https://10.10.10.31:2379
+    - https://10.10.10.32:2379
+    - https://10.10.10.33:2379
+    caFile: /opt/kubernetes/ssl/ca.pem
+    certFile: /opt/kubernetes/ssl/etcd.pem
+    keyFile: /opt/kubernetes/ssl/etcd-key.pem
+
+imageRepository: registry.aliyuncs.com/google_containers
+kind: ClusterConfiguration
+kubernetesVersion: v1.16.2
+networking:
+  dnsDomain: cluster.local
+  podSubnet: "10.244.0.0/16"
+  serviceSubnet: 10.96.0.0/12
+scheduler: {}
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: "ipvs"
+ipvs:
+  excludeCIDRs: null
+  minSyncPeriod: 0s
+  scheduler: "rr"
+  strictARP: false
+  syncPeriod: 30s
+
+
+
+
+# 添加master节点
+# 1. 复制master节点/etc/kubernetes/pki 证书到另一台master节点，执行下面命令添加即可
+# 2. 问题：加入后使用get pods -o wide 显示的ip是另一个网卡的，
+# 3. kubeadm config print join-defaults --component-configs KubeProxyConfiguration KubeletConfiguration (未验证)
+kubeadm join 10.10.10.100:8443 --token abcdef.0123456789abcdef \
+--discovery-token-ca-cert-hash sha256:7a7f4e98a080ef0279cbd3519f01b0732aa76d6694a318be077348a29d469fe3 \
+--control-plane --apiserver-advertise-address 10.10.10.32

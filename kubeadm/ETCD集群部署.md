@@ -9,41 +9,27 @@ mv etcd-v3.3.10-linux-amd64/etcd* /opt/kubernetes/bin/
 
 ### 创建etcd所需证书文件
 
-#### 1、创建 etcd 证书的etcd-csr.json文件
+#### 1、创建 etcd 证书的相关文件
 
 ```shell
+cat > ca-csr.json <<EOF
+{"CN":"kubernetes","key":{"algo":"rsa","size":2048},"ca":{"expiry":"262800h"},"names":[{}]}
+EOF
+
+cat > ca-config.json <<EOF
+{"signing":{"default":{"expiry":"8760h"},"profiles":{"kubernetes":{"expiry":"87600h","usages":["signing","key encipherment","server auth","client auth"]}}}}
+EOF
+
 cat > etcd-csr.json <<EOF
-{
-    "CN": "etcd",
-    "hosts": [
-        "127.0.0.1",
-        "10.10.10.31",
-        "10.10.10.32",
-        "10.10.10.33",
-        "etcd1.k8s.org",
-        "etcd2.k8s.org",
-        "etcd3.k8s.org"
-    ],
-    "key": {
-        "algo": "rsa",
-        "size": 2048
-    },
-    "names": [
-        {
-            "C": "CN",
-            "ST": "BeiJing",
-            "L": "BeiJing",
-            "O": "kubernetes",
-            "OU": "System"
-        }
-    ]
-}
+{"CN":"etcd.kubernetes","hosts":["127.0.0.1","10.10.10.31","10.10.10.32","10.10.10.33","localhost","localhost.localdomain","etcd01.etcd.kubernetes","etcd02.etcd.kubernetes","etcd03.etcd.kubernetes"],"key":{"algo":"rsa","size":2048},"names":[{}]}
 EOF
 ```
 
 #### 2、生成证书和私钥
 
 ```shell
+cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+
 cfssl gencert -ca=ca.pem \
               -ca-key=ca-key.pem \
               -config=ca-config.json \
@@ -155,7 +141,7 @@ EOF
 
 ### 启动etcd集群
 
-- **etcd节点要同时启动，才能启动成功**
+> etcd节点要同时启动，才能启动成功
 
 ```shell
 systemctl daemon-reload
