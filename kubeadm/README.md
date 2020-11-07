@@ -262,7 +262,48 @@ scheduler: {}
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 mode: "ipvs"
+ipvs:
+  excludeCIDRs: null
+  minSyncPeriod: 0s
+  scheduler: "rr"
+  strictARP: false
+  syncPeriod: 30s
 ```
+
+>#### 上面使用的是默认etcd，如果使用外部etcd，参照下面配置
+>
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1107/172830_82423249_5330846.png "屏幕截图.png")
+>
+>#### 相关etcd操作
+>
+>操作etcd有命令行工具etcdctl，有两个api版本互不兼容的，系统默认的v2版本，kubernetes集群使用的是v3版本，v2版本下是看不到v3版本的数据的。
+>
+>```shell
+># 使用环境变量定义api版本
+>export ETCDCTL_API=3
+>
+># 申明etcd相关信息，etcdctl 默认连接的是http://127.0.0.1:2379，因无证书也能访问，建议关闭回环网卡监听。
+>export ETCDCTL_FILE=/opt/kubernetes/bin/etcdctl
+>export ETCD_ENDPOINTS=https://10.10.10.31:2379,https://10.10.10.32:2379,https://10.10.10.33:2379
+>export ETCD_CA_FILE=/opt/kubernetes/ssl/ca.pem
+>export ETCD_cert_FILE=/opt/kubernetes/ssl/etcd.pem
+>export ETCD_key_FILE=/opt/kubernetes/ssl/etcd-key.pem
+>
+># 配置etcdctl别名
+>alias etcdctl="$ETCDCTL_FILE --endpoints=$ETCD_ENDPOINTS --cacert=$ETCD_CA_FILE --cert=$ETCD_cert_FILE --key=$ETCD_key_FILE"
+>
+># etcd有目录结构类似linux文件系统，获取所有key。
+>etcdctl get / --prefix --keys-only
+>
+># 查询命名空间下所有部署的数据：
+>etcdctl get /registry/deployments/default --prefix --keys-only
+>
+># 删除某个数据
+>etcdctl del /registry/daemonsets/kube-system/kube-proxy
+>
+># 删除所有数据
+>etcdctl del / --prefix
+>```
 
 #### 3、执行初始化操作
 
@@ -591,3 +632,4 @@ kubeadm reset
 参考：
 
 https://blog.csdn.net/wc1695040842/article/details/105841329
+
