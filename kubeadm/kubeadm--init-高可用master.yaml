@@ -13,24 +13,29 @@ localAPIEndpoint:
   bindPort: 6443
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
-  name: k8s-master
+  name: master-01.master.kubernetes
   taints:
   - effect: NoSchedule
     key: node-role.kubernetes.io/master
 ---
 apiServer:
   certSANs:  # 这里要写 所有主机名和ip以及虚拟ip
-  - 127.0.0.1
-  - 10.10.10.100
-  - 10.10.10.31
-  - 10.10.10.32
-  - 10.10.10.33
-  - "*.kubernetes.org"   # 这样写也可以，主机名为xx.kubernetes.org 即可
+  - "127.0.0.1"
+  - "10.10.10.100"
+  - "10.10.10.31"
+  - "10.10.10.32"
+  - "10.10.10.33"
+  - "localhost"
+  - "localhost.localdomain"
+  - "*.master.kubernetes"   # 这样写也可以，主机名为xx.master.kubernetes 即可，后续可继续添加master
+  - "cluster.apiserver.kubernetes"
   timeoutForControlPlane: 4m0s
 apiVersion: kubeadm.k8s.io/v1beta2
 certificatesDir: /etc/kubernetes/pki
 clusterName: kubernetes
-controlPlaneEndpoint: 10.10.10.100:8443  # 虚拟ip
+# controlPlaneEndpoint: 虚拟ip(10.10.10.100:8443)或者域名cluster.apiserver.kubernetes:5443均可.
+# 建议写域名，更换vip更方便
+controlPlaneEndpoint: cluster.apiserver.kubernetes:5443
 controllerManager: {}
 dns:
   type: CoreDNS
@@ -68,7 +73,7 @@ ipvs:
 
 # 添加master节点
 # 1. 复制master节点/etc/kubernetes/pki 证书到另一台master节点，执行下面命令添加即可
-# 2. 问题：加入后使用get pods -o wide 显示的ip是另一个网卡的，
+# 2. 问题：加入后使用get pods -o wide 显示的ip是另一个网卡的(配置主机名解析后正常)
 # 3. kubeadm config print join-defaults --component-configs KubeProxyConfiguration KubeletConfiguration (未验证)
 kubeadm join 10.10.10.100:8443 --token abcdef.0123456789abcdef \
 --discovery-token-ca-cert-hash sha256:7a7f4e98a080ef0279cbd3519f01b0732aa76d6694a318be077348a29d469fe3 \

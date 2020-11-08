@@ -1,8 +1,27 @@
 ## ETCD集群部署
 
+### 环境信息
+
+| 角色                   | ip          | 备注 |
+| ---------------------- | ----------- | ---- |
+| etcd01.etcd.kubernetes | 10.10.10.31 |      |
+| etcd02.etcd.kubernetes | 10.10.10.32 |      |
+| etcd03.etcd.kubernetes | 10.10.10.33 |      |
+
+### 配置hosts文件
+
+```shell
+cat << EOF >> /etc/hosts
+10.10.10.31 etcd01.etcd.kubernetes
+10.10.10.32 etcd02.etcd.kubernetes
+10.10.10.33 etcd03.etcd.kubernetes
+EOF
+```
+
 ### 准备etcd二进制文件
 
 ```shell
+mkdir -pv /opt/kubernetes/{cfg,data/etcd,bin,data,ssl,logs}
 tar xf etcd-v3.3.10-linux-amd64.tar.gz
 mv etcd-v3.3.10-linux-amd64/etcd* /opt/kubernetes/bin/
 ```
@@ -12,16 +31,69 @@ mv etcd-v3.3.10-linux-amd64/etcd* /opt/kubernetes/bin/
 #### 1、创建 etcd 证书的相关文件
 
 ```shell
-cat > ca-csr.json <<EOF
-{"CN":"kubernetes","key":{"algo":"rsa","size":2048},"ca":{"expiry":"262800h"},"names":[{}]}
+cat << EOF > ca-csr.json 
+{
+    "CN":"kubernetes",
+    "key":{
+        "algo":"rsa",
+        "size":2048
+    },
+    "ca":{
+        "expiry":"262800h"
+    },
+    "names":[
+        {
+
+        }
+    ]
+}
 EOF
 
-cat > ca-config.json <<EOF
-{"signing":{"default":{"expiry":"8760h"},"profiles":{"kubernetes":{"expiry":"87600h","usages":["signing","key encipherment","server auth","client auth"]}}}}
+cat << EOF > ca-config.json
+{
+    "signing":{
+        "default":{
+            "expiry":"8760h"
+        },
+        "profiles":{
+            "kubernetes":{
+                "expiry":"87600h",
+                "usages":[
+                    "signing",
+                    "key encipherment",
+                    "server auth",
+                    "client auth"
+                ]
+            }
+        }
+    }
+}
 EOF
 
-cat > etcd-csr.json <<EOF
-{"CN":"etcd.kubernetes","hosts":["127.0.0.1","10.10.10.31","10.10.10.32","10.10.10.33","localhost","localhost.localdomain","etcd01.etcd.kubernetes","etcd02.etcd.kubernetes","etcd03.etcd.kubernetes"],"key":{"algo":"rsa","size":2048},"names":[{}]}
+cat << EOF > etcd-csr.json 
+{
+    "CN":"etcd.kubernetes",
+    "hosts":[
+        "127.0.0.1",
+        "10.10.10.31",
+        "10.10.10.32",
+        "10.10.10.33",
+        "localhost",
+        "localhost.localdomain",
+        "etcd-01.etcd.kubernetes",
+        "etcd-02.etcd.kubernetes",
+        "etcd-03.etcd.kubernetes"
+    ],
+    "key":{
+        "algo":"rsa",
+        "size":2048
+    },
+    "names":[
+        {
+
+        }
+    ]
+}
 EOF
 ```
 

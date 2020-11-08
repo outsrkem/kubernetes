@@ -281,16 +281,14 @@ ipvs:
 >```shell
 ># 使用环境变量定义api版本
 >export ETCDCTL_API=3
->
 ># 申明etcd相关信息，etcdctl 默认连接的是http://127.0.0.1:2379，因无证书也能访问，建议关闭回环网卡监听。
->export ETCDCTL_FILE=/opt/kubernetes/bin/etcdctl
+>export PATH=/opt/kubernetes/bin:$PATH
 >export ETCD_ENDPOINTS=https://10.10.10.31:2379,https://10.10.10.32:2379,https://10.10.10.33:2379
 >export ETCD_CA_FILE=/opt/kubernetes/ssl/ca.pem
 >export ETCD_cert_FILE=/opt/kubernetes/ssl/etcd.pem
 >export ETCD_key_FILE=/opt/kubernetes/ssl/etcd-key.pem
->
 ># 配置etcdctl别名
->alias etcdctl="$ETCDCTL_FILE --endpoints=$ETCD_ENDPOINTS --cacert=$ETCD_CA_FILE --cert=$ETCD_cert_FILE --key=$ETCD_key_FILE"
+>alias etcdctl="etcdctl --endpoints=$ETCD_ENDPOINTS --cacert=$ETCD_CA_FILE --cert=$ETCD_cert_FILE --key=$ETCD_key_FILE"
 >
 ># etcd有目录结构类似linux文件系统，获取所有key。
 >etcdctl get / --prefix --keys-only
