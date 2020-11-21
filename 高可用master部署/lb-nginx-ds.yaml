@@ -1,0 +1,61 @@
+# 给需要运行的节点打上标签
+# kubectl label nodes k8s-master kubernetes.io/halb=apiserver-lb
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: lb-nginx-ds
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: lb-nginx
+      roles: apiserver-lb
+  template:
+    metadata:
+      labels:
+        app: lb-nginx
+        roles: apiserver-lb
+    spec:
+      hostNetwork: true
+      containers:
+      - name: lb-nginx
+        image: registry.cn-shanghai.aliyuncs.com/outsrkem/nginx:1.15.2
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 1
+          periodSeconds: 1
+          failureThreshold: 3
+          timeoutSeconds: 1
+          successThreshold: 1
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 1
+          periodSeconds: 1
+          failureThreshold: 3
+          timeoutSeconds: 1
+          successThreshold: 1
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+        key: node-role.kubernetes.io/master
+      nodeSelector:
+        kubernetes.io/halb: "apiserver-lb"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-nginx
+  namespace: kube-system
+spec:
+  selector:
+      app: lb-nginx
+      roles: apiserver-lb
+  sessionAffinity: None
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
