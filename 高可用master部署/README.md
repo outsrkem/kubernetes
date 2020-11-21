@@ -9,7 +9,7 @@ kubectl label nodes k8s-master kubernetes.io/halb=apiserver-lb
 创建配置项
 
 ```shell
-kubectl create configmap lb-nginx-conf --from-file=lb-nginx.conf=./lb-nginx.conf
+kubectl -n kube-system create configmap lb-nginx-conf --from-file=lb-nginx.conf=./lb-nginx.conf
 ```
 nginx 主配置文件（基本不用修改）
 
