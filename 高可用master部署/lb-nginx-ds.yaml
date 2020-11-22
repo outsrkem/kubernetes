@@ -1,3 +1,5 @@
+# 重启pod
+# kubectl rollout restart deployment myapp-deploy
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -28,6 +30,8 @@ spec:
           mountPath: /usr/local/nginx/conf.d/lb-nginx.conf
           subPath: lb-nginx.conf
           readOnly: true
+        - name: vol-lb-nginx-logs
+          mountPath: /usr/local/nginx/logs
         livenessProbe:
           tcpSocket:
             port: 5443
@@ -44,6 +48,8 @@ spec:
           failureThreshold: 3
           timeoutSeconds: 1
           successThreshold: 1
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
       tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/master
@@ -51,12 +57,41 @@ spec:
       nodeSelector:
         kubernetes.io/halb: apiserver-lb
       securityContext:
-        fsGroup: 998        
+        runAsNonRoot: false
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 998
+        seLinuxOptions: {}
       volumes:
       - name: vol-lb-nginx-conf
         configMap:
           defaultMode: 288
+          items:
+            - key: lb-nginx.conf
+              path: lb-nginx.conf
           name: lb-nginx-conf
+      - name: vol-lb-nginx-logs
+        hostPath:
+          path: /var/log/nginx
+          type: DirectoryOrCreate
+      dnsPolicy: ClusterFirstWithHostNet
+      hostAliases:
+        - hostnames:
+          - master-01.master.kubernetes
+          - master-02.master.kubernetes
+          ip: 10.10.10.31
+        - hostnames:
+          - www.baidu.com
+          ip: 36.152.44.96
+      dnsConfig:
+        nameservers:
+          - 192.168.88.2  # 配置集群外节点dns(可选)
+        options:
+          - name: timeout
+            value: ''
+          - name: ndots
+            value: '5'
+          - name: single-request-reopen  
 
 ---
 apiVersion: v1
