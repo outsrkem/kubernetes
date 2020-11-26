@@ -10,6 +10,11 @@ spec:
     matchLabels:
       app: lb-nginx
       roles: apiserver-lb
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -91,7 +96,7 @@ spec:
             value: ''
           - name: ndots
             value: '5'
-          - name: single-request-reopen  
+          - name: single-request-reopen
 
 ---
 apiVersion: v1
@@ -100,13 +105,16 @@ metadata:
   name: lb-nginx
   namespace: kube-system
 spec:
-  selector:
-      app: lb-nginx
-      roles: apiserver-lb
-  sessionAffinity: None
+  clusterIP: 
   ports:
-  - protocol: TCP
-    port: 5443
+  - port: 5443
+    protocol: TCP
     targetPort: 5443
+  selector:
+    app: lb-nginx
+    roles: apiserver-lb
+  sessionAffinity: None
+  type: ClusterIP
+
 
 
