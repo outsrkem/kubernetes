@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-tools
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: nginx-tools
+  template: #pod模板
+    metadata:
+      labels:
+        app: nginx-tools
+      name: nginx-tools
+    spec:
+      hostNetwork: true
+      containers:
+      - name: nginx
+        image: registry.cn-shanghai.aliyuncs.com/outsrkem/nginx:1.15.2-tools
+        imagePullPolicy: IfNotPresent
+        resources: # 资源管理
+          requests: # 容器运行时，最低资源需求
+            cpu: 100m # CPU资源（核数），两种方式，浮点数或者是整数+m，0.1=100m，最少值为0.001核（1m）
+            memory: 10Mi # 内存 ，如大写M为十进制，Mi为二进制。
+          limits: # 容器运行时，最大资源限制
+            cpu: 200m
+            memory: 20Mi
+        ports:
+        - containerPort: 80 # containerPort是pod内部容器的端口，targetPort映射到containerPort。
+          name: httpd
+          protocol: TCP
+        volumeMounts:
+        - name: vol-lb-nginx-logs
+          mountPath: /usr/local/nginx/logs
+        - name: vol-localtime
+          mountPath: /etc/localtime
+          readOnly: true
+        livenessProbe: # 存活性探针
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 1  # 容器启动之后多长时间开始探测，默认是容器已启动开始探测。
+          periodSeconds: 20       # 执行探测的频率(以秒为单位)。默认为10秒。最低值是1
+          failureThreshold: 3     # 探测几次失败 才认为失败,默认为3。最小值为1。
+          timeoutSeconds: 1       # 探针超时的秒数。默认值是1秒。最小值为1。
+          successThreshold: 1     # 从上次检查失败后重新认定检查成功的检查次数阈值（必须是连续成功），默认为1
+        readinessProbe: # 就绪性探针
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 1  # 容器启动之后多长时间开始探测，默认是容器已启动开始探测。
+          periodSeconds: 10       # 执行探测的频率(以秒为单位)。默认为10秒。最低值是1
+          failureThreshold: 3     # 探测几次失败 才认为失败,默认为3。最小值为1。
+          timeoutSeconds: 1       # 探针超时的秒数。默认值是1秒。最小值为1。
+          successThreshold: 1     # 从上次检查失败后重新认定检查成功的检查次数阈值（必须是连续成功），默认为1
+      volumes:
+      - name: vol-lb-nginx-logs
+        hostPath:
+          path: /var/log/nginx
+          type: DirectoryOrCreate
+      - name: vol-localtime
+        hostPath:
+          path: /etc/localtime
+          type: File
+      hostAliases:
+        - hostnames:
+          - master-01.master.kubernetes
+          - master-02.master.kubernetes
+          ip: 10.10.10.31
+        - hostnames:
+          - www.baidu.com
+          ip: 127.0.0.1
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        nameservers:
+          - 192.168.88.2  # 配置集群外节点dns(可选)
+        options:
+          - name: timeout
+            value: ''
+          - name: ndots
+            value: '5'
+          - name: single-request-reopen
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: nginx-tools
+  sessionAffinity: None
+  type: ClusterIP

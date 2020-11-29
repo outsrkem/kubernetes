@@ -28,7 +28,7 @@ spec:
         resources: # 资源管理
           requests: # 容器运行时，最低资源需求
             cpu: 100m # CPU资源（核数），两种方式，浮点数或者是整数+m，0.1=100m，最少值为0.001核（1m）
-            memory: 10Mi
+            memory: 10Mi # 内存 ，如大写M为十进制，Mi为二进制。
           limits: # 容器运行时，最大资源限制
             cpu: 200m
             memory: 20Mi
@@ -93,8 +93,11 @@ metadata:
   name: nginx
   namespace: default
 spec:
-  selector:
-    app: nginx-tools
   ports:
   - port: 80
+    protocol: TCP
     targetPort: 80
+  selector:
+    app: nginx-tools
+  sessionAffinity: None
+  type: ClusterIP
