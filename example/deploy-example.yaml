@@ -34,10 +34,20 @@ spec:
   revisionHistoryLimit: 10
   progressDeadlineSeconds: 600      
   strategy: # 副本更新策略
+    # #升级策略（默认为滚动升级，不需要修改）
+    type: RollingUpdate  
     rollingUpdate:
+      # maxSurge 滚动更新时最多可以多启动多少个pod
+      # maxUnavailable:滚动更新时最大可以删除多少个pod
+      # maxSurge和maxUnavailable可以用来决定更新是的最大pod数和最小pod数
+      # 例如
+      # replicas是5
+      # maxSurge: 1
+      # maxUnavailable: 0
+      # 更新时 最大的pod数是 replicas+ maxSurge = 5+1 =6，最大的个数是6
+      # 最小pod数是 replicas - maxUnavailable = 5-0 = 5,最小pod数是5，所以只能先启动一个pod，再删除一个pod
       maxSurge: 0
       maxUnavailable: 1
-    type: RollingUpdate
   template: #pod模板
     metadata:
       labels:
