@@ -1,0 +1,20 @@
+# 例如svc的IP是10.105.69.186，可以通过IP 10.105.69.186 代理IP 13.75.107.151
+# endpoints的metadata.name 和 service 的metadata.name 需要保持一直，否则无法关联
+apiVersion: v1
+kind: Service
+metadata:
+  name: mynoselector-service
+spec:
+  ports:
+  - protocol: TCP
+    port: 50000
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: mynoselector-service
+subsets:
+  - addresses:
+    - ip: 13.75.107.151
+    ports:
+    - port: 3306
