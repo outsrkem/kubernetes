@@ -13,34 +13,41 @@ localAPIEndpoint:
   bindPort: 6443
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
-  name: master-01.master.kubernetes
+  name: master-01.k8s.io
   taints:
   - effect: NoSchedule
     key: node-role.kubernetes.io/master
 ---
 apiServer:
-  certSANs:  # 这里要写 所有主机名和ip以及虚拟ip
+  certSANs:    # 这里要写所有master主机名和ip以及虚拟ip和必要的DNS
+  - "kubernetes"
+  - "kubernetes.default"
+  - "kubernetes.default.svc"
+  - "kubernetes.default.svc.cluster.local"
+  - "10.96.0.1"
   - "127.0.0.1"
-  - "10.10.10.100"
-  - "10.10.10.31"
-  - "10.10.10.32"
-  - "10.10.10.33"
+  - "10.10.10.100"  # VIP
+  - "10.10.10.31"   # master-01的ip
+  - "10.10.10.32"   # master-02的ip
+  - "10.10.10.33"   # master-03的ip
   - "localhost"
   - "localhost.localdomain"
-  - "*.master.kubernetes"   # 这样写也可以，主机名为xx.master.kubernetes 即可，后续可继续添加master
-  - "cluster.apiserver.kubernetes"
+  - "apiserver.cluster.kubernetes"  # VIP的hosts映射(域名)，可选
+  - "master-01.k8s.io"    # master-01的主机名
+  - "master-02.k8s.io"    # master-02的主机名
+  - "master-03.k8s.io"    # master-03的主机名
   timeoutForControlPlane: 4m0s
 apiVersion: kubeadm.k8s.io/v1beta2
 certificatesDir: /etc/kubernetes/pki
 clusterName: kubernetes
-# controlPlaneEndpoint: 虚拟ip(10.10.10.100:8443)或者域名cluster.apiserver.kubernetes:5443均可.
+# controlPlaneEndpoint: 虚拟ip(10.10.10.100:5443)或者域名apiserver.cluster.kubernetes:5443均可.
 # 建议写域名，更换vip更方便
-controlPlaneEndpoint: cluster.apiserver.kubernetes:5443
+controlPlaneEndpoint: 10.10.10.100:5443
 controllerManager: {}
 dns:
   type: CoreDNS
 etcd:
-  external: # 外部etcd
+  external: # 外部etcd，需要自行部署
     endpoints:
     - https://10.10.10.31:2379
     - https://10.10.10.32:2379
@@ -75,6 +82,7 @@ ipvs:
 # 1. 复制master节点/etc/kubernetes/pki 证书到另一台master节点，执行下面命令添加即可
 # 2. 问题：加入后使用get pods -o wide 显示的ip是另一个网卡的(配置主机名解析后正常)
 # 3. kubeadm config print join-defaults --component-configs KubeProxyConfiguration KubeletConfiguration (未验证)
-kubeadm join 10.10.10.100:8443 --token abcdef.0123456789abcdef \
+# 4. --apiserver-advertise-address 指定节点的ip，默认会使用一个有网关的ip
+kubeadm join 10.10.10.100:5443 --token abcdef.0123456789abcdef \
 --discovery-token-ca-cert-hash sha256:7a7f4e98a080ef0279cbd3519f01b0732aa76d6694a318be077348a29d469fe3 \
 --control-plane --apiserver-advertise-address 10.10.10.32
