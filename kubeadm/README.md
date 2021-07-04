@@ -310,9 +310,12 @@ kubeadm init --config kubeadm.yaml --dry-run # 模拟操作
 kubeadm init --config kubeadm.yaml
 ````
 
+集群初始化如果遇到问题，可以使用kubeadm reset命令进行清理然后重新执行初始化，该命令会重置整个集群，慎用。
+
 完整的官方文档可以参考：
-https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
-https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/
+
+> https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/          
+> https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/
 
 ### 配置 kubectl
 
@@ -333,6 +336,7 @@ Kubernetes 集群默认需要加密方式访问，以上操作就是将刚刚部
 
 ```
 # 启用 kubectl 命令自动补全功能(注销重新登录生效)
+yum install -y bash-completion
 echo "source <(kubectl completion bash)" >> ~/.bashrc
 ```
 查看集群状态：
@@ -408,7 +412,6 @@ kube-proxy-przwf                     1/1     Running   0
 kube-scheduler-k8s-master            1/1     Running   0
 ```
 可以看到，CoreDNS依赖于网络的 Pod 都处于 Pending 状态，即调度失败。这当然是符合预期的：因为这个 Master 节点的网络尚未就绪。
-集群初始化如果遇到问题，可以使用kubeadm reset命令进行清理然后重新执行初始化。
 
 ### 部署网络插件
 
@@ -441,22 +444,24 @@ kube-scheduler-k8s-master            1/1     Running
 可以看到，所有的系统 Pod 都成功启动了，而刚刚部署的flannel网络插件则在 kube-system 下面新建了一个名叫kube-flannel-ds-amd64-lkf2f的 Pod，一般来说，这些 Pod 就是容器网络插件在每个节点上的控制组件。
 Kubernetes 支持容器网络插件，使用的是一个名叫 CNI 的通用接口，它也是当前容器网络的事实标准，市面上的所有容器网络开源项目都可以通过 CNI 接入 Kubernetes，比如 Flannel、Calico、Canal、Romana 等等，它们的部署方式也都是类似的“一键部署”。
 
-至此，Kubernetes 的 Master 节点就部署完成了。如果只需要一个单节点的 Kubernetes，现在你就可以使用了。不过，在默认情况下，Kubernetes 的 Master 节点有污点 (taint) 存在是不能运行用户 Pod 的。可以通过以下步骤删除污点。而**NoSchedule**这个污点仅影响调度过程，对现存 Pod 无影响。
+至此，Kubernetes 的 Master 节点就部署完成了。如果只需要一个单节点的 Kubernetes，现在你就可以使用了。不过，在默认情况下，Kubernetes 的 Master 节点有污点 (taint) 存在是不能运行用户 Pod 的。可以通过以下步骤删除污点。而**NoSchedule**这个污点仅影响调度过程，对现存 Pod 无影响。        
 
-Ⅰ、查看污点（Taints）
+Taints 的删除和添加，正常部署无需操作，默认即可。
+
+Ⅰ、查看 Taints
 
 ```shell
 kubectl describe node k8s-master |grep Taints
 Taints:             node-role.kubernetes.io/master:NoSchedule
 ```
 
-Ⅱ、删除这个污点
+Ⅱ、删除这个 Taints
 
 ```shell
 kubectl taint nodes k8s-master node-role.kubernetes.io/master=:NoSchedule-
 ```
 
-Ⅲ、添加这样的污点
+Ⅲ、添加这样的 Taints
 
 ```shell
 kubectl taint nodes k8s-master node-role.kubernetes.io/master=:NoSchedule
@@ -473,7 +478,9 @@ kubeadm join 10.10.10.31:6443 --token 67kq55.8hxoga556caxty7s \
     --discovery-token-ca-cert-hash ha256:7d50e704bbfe69661e37c5f3ad13b1b88032b6b2b703ebd4899e259477b5be69
 
 # 如果执行kubeadm init时没有记录下加入集群的命令，可以通过以下命令重新创建
-kubeadm token create --print-join-command
+# --ttl 10m 生成10分钟有效期的token。
+# https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-token/
+kubeadm token create --ttl 10m --print-join-command
 ```
 
 在k8s-node1上执行kubeadm join ：
