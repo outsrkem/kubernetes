@@ -46,8 +46,8 @@ spec:
       # maxUnavailable: 0
       # 更新时 最大的pod数是 replicas+ maxSurge = 5+1 =6，最大的个数是6
       # 最小pod数是 replicas - maxUnavailable = 5-0 = 5,最小pod数是5，所以只能先启动一个pod，再删除一个pod
-      maxSurge: 0
-      maxUnavailable: 1
+      maxSurge: 1
+      maxUnavailable: 0
   template: #pod模板
     metadata:
       labels:
@@ -116,9 +116,13 @@ spec:
           defaultMode: 288
       hostAliases:
         - hostnames:
-          - master-01.master.kubernetes
-          - master-02.master.kubernetes
+          - master-01.k8s.io
+          - master-01
           ip: 10.10.10.31
+        - hostnames:
+          - master-02.k8s.io
+          - master-02
+          ip: 10.10.10.32
         - hostnames:
           - www.baidu.com
           ip: 36.152.44.96
