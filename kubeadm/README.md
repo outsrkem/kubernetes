@@ -330,8 +330,8 @@ mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
 ```
-Kubernetes 集群默认需要加密方式访问，以上操作就是将刚刚部署生成的 Kubernetes 集群的安全配置文件保存到当前用户的.kube 目录下，kubectl  默认会使用这个目录下的授权信息访问 Kubernetes 集群。
-如果不这么做的话，我们每次都需要通过 export KUBECONFIG 环境变量告诉 kubectl 这个安全配置文件的位置。
+Kubernetes 集群默认需要加密方式访问，以上操作就是将刚刚部署生成的 Kubernetes 集群的安全配置文件保存到当前用户的.kube 目录下，kubectl  默认会使用`~/.kube/config`文件的授权信息访问 Kubernetes 集群。
+如果不这么做的话，我们每次都需要通过 export KUBECONFIG 环境变量告诉 kubectl 这个安全配置文件的位置或者执行kubectl  时指定该文件位置，如 `kubectl --kubeconfig=/etc/kubernetes/admin.conf get node`。
 
 
 ```
