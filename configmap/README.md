@@ -9,24 +9,24 @@
 
 ```shell
 kubectl create configmap nginx-config \
---from-literal=WEB.NGINX_PORT=80 \
---from-literal=WEB.SERVER_NAME=myapp.yong.com \
---from-literal=WEB.DB_IP=1.2.3.4 \
---from-literal=WEB.DB_PORT=3306 \
---from-literal=WEB.DB_USER_NAME=server
+--from-literal=NGINX_PORT=80 \
+--from-literal=SERVER_NAME=myapp.yong.com \
+--from-literal=DB_IP=1.2.3.4 \
+--from-literal=DB_PORT=3306 \
+--from-literal=DB_USER_NAME=server
 ```
 
-查看该资源，看到此时 WEB.*** 均为键，后面均为值，这种创建方式更有利于使用env方式注入到pods里面。我们可看到get出来的yaml清单中的键是以字母顺序排序的。
+查看该资源，看到此时 *** 均为键，后面均为值，这种创建方式更有利于使用env方式注入到pods里面。我们可看到get出来的yaml清单中的键是以字母顺序排序的。
 
 ```shell
 kubectl get configmaps nginx-config -o yaml # 简写为 kubectl get cm nginx-config -o yaml
 apiVersion: v1
 data:
-  WEB.DB_IP: 1.2.3.4
-  WEB.DB_PORT: "3306"
-  WEB.DB_USER_NAME: server
-  WEB.NGINX_PORT: "80"
-  WEB.SERVER_NAME: myapp.yong.com
+  DB_IP: 1.2.3.4
+  DB_PORT: "3306"
+  DB_USER_NAME: server
+  NGINX_PORT: "80"
+  SERVER_NAME: myapp.yong.com
 ......
 ```
 
@@ -38,12 +38,12 @@ data:
       valueFrom:               # kubectl explain pods.spec.containers.env.valueFrom.configMapKeyRef
         configMapKeyRef:
           name: nginx-config   # 这是configmap的资源名称
-          key: WEB.NGINX_PORT  # 这是configmap中的键，可以与环境变量不同，但建议使用相同的名称。
+          key: NGINX_PORT  # 这是configmap中的键，可以与环境变量不同，但建议使用相同的名称。
     - name: NGINX_SERVER_NAME
       valueFrom:
         configMapKeyRef:
           name: nginx-config
-          key: WEB.SERVER_NAME
+          key: SERVER_NAME
 ```
 
 
