@@ -26,10 +26,12 @@ kind: Deployment
 metadata:
   name: nginx-tools
   namespace: default
+  labels:
+    app: nginx-tools # 这是deploy 的标签，和pod 标签没关系
 spec:
   replicas: 1
   selector:
-    matchLabels:
+    matchLabels: # 标签选择器，关联pod
       app: nginx-tools
   revisionHistoryLimit: 10
   progressDeadlineSeconds: 600      
@@ -52,11 +54,11 @@ spec:
     metadata:
       labels:
         app: nginx-tools
-      name: nginx-tools
+      #name: nginx-tools
     spec:
       containers:
       - name: nginx
-        image: registry.cn-shanghai.aliyuncs.com/outsrkem/nginx:1.15.2-tools
+        image: swr.cn-north-1.myhuaweicloud.com/onge/nginx:1.24.0-tools.2
         imagePullPolicy: IfNotPresent
         resources: # 资源管理
           requests: # 容器运行时，最低资源需求
