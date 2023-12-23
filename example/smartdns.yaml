@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: smartdns
+  labels:
+    app: smartdns
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: smartdns
+  template:
+    metadata:
+      labels:
+        app: smartdns
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - {key: kubernetes.io/hostname, operator: In, values: ["k8s-master"]}
+              weight: 1
+      containers:
+        - name: smartdns
+          image: swr.cn-north-1.myhuaweicloud.com/onge/smartdns:latest
+          imagePullPolicy: IfNotPresent
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        nameservers:
+          - 127.0.0.1
+        options:
+          - name: timeout
+            value: ''
+          - name: ndots
+            value: '5'
+          - name: single-request-reopen
+      hostNetwork: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      tolerations:
+        - {effect: NoSchedule, key: node-role.kubernetes.io/master, operator: Exists}
+
